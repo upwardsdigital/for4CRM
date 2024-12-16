@@ -1,0 +1,48 @@
+name: Compose
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    if: false  # false = Disabled.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get short commit SHA
+        id: get_sha
+        run: echo "GIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Extract repository name
+        id: extract_repo_name
+        run: echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)" >> $GITHUB_ENV
+
+      - name: Clone & Update repository
+        env:
+          GIT_SHORT_SHA: ${{ env.GIT_SHORT_SHA }}
+          REPO_NAME: ${{ env.REPO_NAME }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          # Clone target repository with GitHub token
+          git clone https://x-access-token:${{ secrets.GIT_PAT }}@github.com/${{ github.repository_owner }}/4u.cloud.resources.git target-repo
+          
+          # Navigate to the cloned repo and set Git config
+          cd target-repo
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          # Switch to the current branch
+          git checkout $CURRENT_BRANCH
+          
+          # Update image tag in Docker Compose file
+          sed -i "s|\(image: .*${REPO_NAME}:\).*|\1${GIT_SHORT_SHA}|" internal/apps/${REPO_NAME}.compose.yml
+          
+          # Commit and push changes
+          git commit -am "Update Docker Compose image tag to ${GIT_SHORT_SHA}"
+          git push origin $CURRENT_BRANCH
