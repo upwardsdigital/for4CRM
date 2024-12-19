@@ -9,7 +9,7 @@ on:
 jobs:
   compose:
     runs-on: ubuntu-latest
-    if: false  # false = Disabled.
+    if: true  # false = Disabled.
 
     steps:
       - name: Checkout repository
