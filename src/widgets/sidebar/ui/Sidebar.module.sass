@@ -1,0 +1,36 @@
+.sidebar
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  gap: 0
+  width: 240px
+
+  .header
+    padding: 18px
+    height: 80px
+
+    .logo
+      height: 100%
+
+  .content
+    height: 100%
+    min-height: 100%
+    background: var(--sidebar-bg)
+    color: var(--sidebar-color)
+    padding: 40px 0
+
+  .sidebar_item
+    width: 220px
+    color: inherit
+    padding: 16px 30px
+    cursor: pointer
+    font-weight: 700
+    font-size: 16px
+    transition: .3s opacity
+
+    &:hover
+      opacity: 0.8
+
+    &.active
+      background: var(--sidebar-active-item-bg)
+      border-left: 3px solid #fff

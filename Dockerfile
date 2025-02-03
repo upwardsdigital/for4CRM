@@ -1,14 +1,26 @@
-# Use a base image
-FROM alpine:latest
+FROM node:20 AS builder
 
-# Set working directory (optional)
 WORKDIR /app
 
-# Copy files into the container (optional)
-# COPY . .
+COPY package.json yarn.lock ./
 
-# Run commands during build (optional)
-# RUN apk add --no-cache curl
+RUN yarn install
 
-# Define the container startup command
-CMD ["echo", "Hello, World!"]
+COPY . .
+
+RUN yarn build
+
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+
+COPY package.json yarn.lock ./
+RUN yarn install --production
+
+RUN yarn global add serve
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "dist", "-l", "3000"]
