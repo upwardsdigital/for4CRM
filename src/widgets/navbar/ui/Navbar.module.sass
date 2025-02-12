@@ -1,12 +1,16 @@
 .navbar
+  position: fixed
+  top: 0
+  left: 240px
   background: var(--header-bg)
   color: var(--header-color)
   padding: 18px 40px
   display: flex
   align-items: center
   justify-content: space-between
-  width: 100%
+  width: calc(100% - 240px)
   height: 80px
+  z-index: 1
 
   .left
     display: flex

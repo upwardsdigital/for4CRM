@@ -1,0 +1,189 @@
+import clsx from 'clsx';
+import styles from './DepartmentsPage.module.sass';
+import { useEffect, useState } from 'react';
+import { ModalDataT, TableDataT } from '@shared/types';
+import { Table } from '@widgets/table';
+import { columns } from '../config/columns';
+import { EditIcon, ViewIcon } from '@shared/ui/icons';
+import { DepartmentService } from '@shared/api/services/DepartmentService';
+import { ToggleButton } from '@/shared/ui/ToggleButton';
+import { Button } from '@shared/ui/Button/ui/Button';
+import { PlusIcon } from '@shared/ui/icons/PlusIcon';
+import { Modal } from '@shared/ui/Modal';
+import { DataAction } from '@features/data-action/ui/DataAction';
+import { initialModalData } from '../model/initialModalData';
+
+export const DepartmentsPage = () => {
+  const [data, setData] = useState<TableDataT>({
+    rows: [],
+    count: 0,
+    status: {
+      loading: false,
+      error: false,
+      message: '',
+    },
+    filters: {
+      search: '',
+    },
+    pagination: {
+      skip: 0,
+      take: 10,
+    },
+  });
+
+  const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
+
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      status: { ...prev.status, loading: true },
+    }));
+    DepartmentService.getDepartments({
+      ...data.pagination,
+      ...data.filters,
+      type: 0,
+    })
+      .then((resp) => {
+        setData((prev) => ({
+          ...prev,
+          rows: resp.data.items,
+          count: resp.data.info.count,
+        }));
+      })
+      .finally(() => {
+        setData((prev) => ({
+          ...prev,
+          status: { ...prev.status, loading: false },
+        }));
+      });
+  }, [data.filters, data.pagination]);
+
+  const updateDepartmentStatus = (id: number, status: boolean) => {
+    setData((prev) => {
+      const prevRowsCopy = [...prev.rows];
+      const userIndex = data.rows.findIndex((item) => item.id === id);
+      prevRowsCopy[userIndex].is_active = status;
+      return { ...prev, rows: prevRowsCopy };
+    });
+  };
+
+  const handleModalSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    switch (modalData.type) {
+      case 'add':
+        try {
+          const response = await DepartmentService.createDepartment(modalData.values);
+          if (response) {
+            alert('success');
+            handleModalOpen();
+          }
+        } catch (error) {}
+        break;
+      case 'edit':
+        try {
+          const response = await DepartmentService.updateDepartmentById(modalData.values);
+          if (response) {
+            alert('success');
+            handleModalOpen();
+          }
+        } catch (error) {}
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleEdit = (data: any) => {
+    setModalData((prev) => ({
+      ...prev,
+      isOpen: true,
+      type: 'edit',
+      values: { ...prev.values, ...data },
+    }));
+  };
+
+  const handleModalOpen = () =>
+    setModalData((prev) => ({ ...prev, ...initialModalData, isOpen: !prev.isOpen }));
+
+  return (
+    <div className={clsx(styles.page, 'page')}>
+      <div className="page-header">
+        <h1 className="page_title">Отделы</h1>
+        <Button onClick={handleModalOpen}>
+          <PlusIcon />
+          Добавить
+        </Button>
+      </div>
+
+      <div className={clsx(styles.page_table, 'page_table')}>
+        <Table
+          loading={data.status.loading}
+          totalRows={data.count}
+          take={data.pagination.take}
+          search={data.filters.search}
+          onFilterChange={(data) => {
+            setData((prev) => ({
+              ...prev,
+              filters: {
+                ...prev.filters.search,
+                [data.key]: data.value,
+              },
+            }));
+          }}
+          onPageChange={(data) =>
+            setData((prev) => ({
+              ...prev,
+              pagination: {
+                take: data.pageSize,
+                skip: data.pageSize * data.page,
+              },
+            }))
+          }
+          columns={[
+            ...columns,
+            {
+              type: 'actions',
+              field: 'actions',
+              width: 120,
+              renderCell: ({ row }) => {
+                return (
+                  <div className="table-actions">
+                    <ToggleButton
+                      value={row.is_active}
+                      onChange={(e) => {
+                        const value = e.target.checked;
+                        updateDepartmentStatus(row.id, value);
+                        DepartmentService.updateDepartmentById({
+                          is_active: value,
+                          id: row.id,
+                        }).catch(() => {
+                          updateDepartmentStatus(row.id, !value);
+                        });
+                      }}
+                    />
+                    <button onClick={() => handleEdit(row)}>
+                      <EditIcon />
+                    </button>
+                    <button onClick={() => console.log('hello')}>
+                      <ViewIcon />
+                    </button>
+                  </div>
+                );
+              },
+            },
+          ]}
+          rows={data.rows}
+        />
+      </div>
+
+      <Modal isOpen={modalData.isOpen} onClose={handleModalOpen}>
+        <DataAction
+          title="отдела"
+          modalData={modalData}
+          setModalData={setModalData}
+          onSubmit={handleModalSubmit}
+        />
+      </Modal>
+    </div>
+  );
+};

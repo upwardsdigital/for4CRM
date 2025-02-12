@@ -6,9 +6,12 @@
   box-sizing: border-box
   margin: 0
   padding: 0
+  font-family: "Montserrat", 'sans-serif'
 
+html,
 body
   font-family: "Montserrat", 'sans-serif'
+  overflow-x: hidden
 
 button
   background: none
@@ -17,3 +20,72 @@ button
   display: inline-flex
   align-items: center
   gap: 8px
+
+a
+  color: var(--link-color)
+
+.page
+  margin-top: 40px
+
+  &-header
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+  &_title
+    font-weight: 700
+    font-size: 42px
+    color: var(--black)
+
+  &_table
+    margin-top: 48px
+
+.tag
+  padding: 6px 16px
+  border-radius: 100px
+  background: #FAFAFA
+
+.status
+  display: inline-flex
+  align-items: center
+  gap: 5px
+  font-size: 12px
+  font-weight: 400
+  color: var(--black)
+
+  span
+    width: 12px
+    height: 12px
+    display: block
+    border-radius: 50%
+    border: 2px solid black
+
+  &.active span
+    border-color: #41C95E
+
+  &.inactive span
+    border-color: #C94341
+
+.table
+
+  &-container
+    display: flex
+    flex-direction: column
+
+  &-title
+    display: inline-flex
+    align-items: center
+    gap: 10px
+    font-size: 26px
+    color: var(--black)
+
+  &-filters
+    margin-top: 32px
+
+  &-content
+    margin-top: 32px
+
+  &-actions
+    display: flex
+    align-items: center
+    gap: 12px
