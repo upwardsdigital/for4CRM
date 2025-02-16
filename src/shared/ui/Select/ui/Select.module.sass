@@ -1,0 +1,44 @@
+.select
+  position: relative
+  display: flex
+  flex-direction: column
+  gap: 10px
+
+  &_title
+    width: 100%
+    display: inline-flex
+    align-items: center
+    justify-content: space-between
+    gap: 10px
+    border: 1px solid #E0E4EA
+    border-radius: 10px
+    padding: 10px 20px
+    position: relative
+    min-height: 45px
+    height: 45px
+    cursor: pointer
+
+  .label_text, .helper
+    font-size: 12px
+    color: var(--black)
+
+  &_options
+    position: absolute
+    top: calc(100% + 10px)
+    left: 0
+    border: 1px solid #E0E4EA
+    display: flex
+    flex-direction: column
+    border-radius: 10px
+    width: 100%
+    background: #fff
+    z-index: 1
+    overflow: hidden
+
+    &_item
+      padding: 10px
+      background: #fff
+
+      &:hover
+        cursor: pointer
+        background: #f2f2f2

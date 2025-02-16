@@ -6,6 +6,8 @@ interface ButtonProps {
   children: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
+  loading?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -14,12 +16,15 @@ export const Button: React.FC<ButtonProps> = ({
   className,
   style,
   children,
+  loading,
+  disabled,
   onClick,
 }) => {
   return (
     <button
-      className={clsx(styles.button, styles[variant], className)}
+      className={clsx(styles.button, styles[variant], className, styles[variant])}
       onClick={onClick}
+      disabled={loading || disabled}
       style={style}
     >
       {children}

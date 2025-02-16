@@ -12,6 +12,7 @@ import { PlusIcon } from '@shared/ui/icons/PlusIcon';
 import { Modal } from '@shared/ui/Modal';
 import { DataAction } from '@features/data-action/ui/DataAction';
 import { initialModalData } from '../model/initialModalData';
+import { toast } from 'react-toastify';
 
 export const DepartmentsPage = () => {
   const [data, setData] = useState<TableDataT>({
@@ -33,29 +34,31 @@ export const DepartmentsPage = () => {
 
   const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
 
-  useEffect(() => {
-    setData((prev) => ({
-      ...prev,
-      status: { ...prev.status, loading: true },
-    }));
-    DepartmentService.getDepartments({
-      ...data.pagination,
-      ...data.filters,
-      type: 0,
-    })
-      .then((resp) => {
+  const fetchData = async () => {
+    try {
+      const resp = await DepartmentService.getDepartments({
+        ...data.pagination,
+        ...data.filters,
+        type: 0,
+      });
+      if (resp.data) {
         setData((prev) => ({
           ...prev,
           rows: resp.data.items,
           count: resp.data.info.count,
         }));
-      })
-      .finally(() => {
-        setData((prev) => ({
-          ...prev,
-          status: { ...prev.status, loading: false },
-        }));
-      });
+      }
+    } catch (error) {
+    } finally {
+      setData((prev) => ({
+        ...prev,
+        status: { ...prev.status, loading: false },
+      }));
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [data.filters, data.pagination]);
 
   const updateDepartmentStatus = (id: number, status: boolean) => {
@@ -74,8 +77,9 @@ export const DepartmentsPage = () => {
         try {
           const response = await DepartmentService.createDepartment(modalData.values);
           if (response) {
-            alert('success');
+            toast('Успешно добавлено', { type: 'success' });
             handleModalOpen();
+            fetchData();
           }
         } catch (error) {}
         break;
@@ -83,8 +87,9 @@ export const DepartmentsPage = () => {
         try {
           const response = await DepartmentService.updateDepartmentById(modalData.values);
           if (response) {
-            alert('success');
+            toast('Успешно изменено', { type: 'success' });
             handleModalOpen();
+            fetchData();
           }
         } catch (error) {}
         break;
@@ -98,7 +103,7 @@ export const DepartmentsPage = () => {
       ...prev,
       isOpen: true,
       type: 'edit',
-      values: { ...prev.values, ...data },
+      values: { ...data },
     }));
   };
 
@@ -117,28 +122,8 @@ export const DepartmentsPage = () => {
 
       <div className={clsx(styles.page_table, 'page_table')}>
         <Table
-          loading={data.status.loading}
-          totalRows={data.count}
-          take={data.pagination.take}
-          search={data.filters.search}
-          onFilterChange={(data) => {
-            setData((prev) => ({
-              ...prev,
-              filters: {
-                ...prev.filters.search,
-                [data.key]: data.value,
-              },
-            }));
-          }}
-          onPageChange={(data) =>
-            setData((prev) => ({
-              ...prev,
-              pagination: {
-                take: data.pageSize,
-                skip: data.pageSize * data.page,
-              },
-            }))
-          }
+          table={data}
+          setTable={setData}
           columns={[
             ...columns,
             {
@@ -156,7 +141,9 @@ export const DepartmentsPage = () => {
                         DepartmentService.updateDepartmentById({
                           is_active: value,
                           id: row.id,
-                        }).catch(() => {
+                        }).catch((err) => {
+                          toast('Не удалось обновить статус');
+                          console.log(err);
                           updateDepartmentStatus(row.id, !value);
                         });
                       }}
@@ -164,15 +151,11 @@ export const DepartmentsPage = () => {
                     <button onClick={() => handleEdit(row)}>
                       <EditIcon />
                     </button>
-                    <button onClick={() => console.log('hello')}>
-                      <ViewIcon />
-                    </button>
                   </div>
                 );
               },
             },
           ]}
-          rows={data.rows}
         />
       </div>
 

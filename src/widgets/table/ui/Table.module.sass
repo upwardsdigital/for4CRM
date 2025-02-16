@@ -1,3 +1,25 @@
+.table_header
+  display: inline-flex
+  align-items: center
+  gap: 6px
+
+  .sort_btn
+    display: flex
+    flex-direction: column
+    margin-top: -10px
+    transition: .3s transform
+
+    &:hover
+      transform: scale(1.2)
+
+    svg:first-child
+      margin-top: 10px
+    svg:last-child
+      margin-top: -10px
+
+.search_field
+  width: max-content
+
 .table_footer
   margin-top: 24px
   display: flex

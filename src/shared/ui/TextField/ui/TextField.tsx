@@ -13,10 +13,13 @@ interface TextFieldProps {
   placeholder?: string;
   inputClassName?: string;
   className?: string;
+  leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   isError?: boolean;
   helperText?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: () => void;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -29,16 +32,19 @@ export const TextField: React.FC<TextFieldProps> = ({
   className,
   inputClassName,
   rightIcon,
+  leftIcon,
   isError,
+  disabled,
   helperText,
   onChange,
+  onClick,
 }) => {
   return (
     <label className={clsx(styles.label, className, isError && styles.error)}>
       {label && <p className={styles.label_text}>{label}</p>}
       <div className={styles.field_wrap}>
         {type === 'search' && <SearchIcon />}
-        {rightIcon}
+        {leftIcon}
         <input
           name={name}
           type={type === 'number' ? 'text' : type}
@@ -47,8 +53,10 @@ export const TextField: React.FC<TextFieldProps> = ({
           value={value}
           required={required}
           onChange={onChange}
+          onClick={onClick}
         />
         {type === 'number' && <TextFieldNumberArrows value={value} onChange={onChange} />}
+        {rightIcon}
       </div>
       {helperText && <p className={styles.helper}>{helperText}</p>}
     </label>

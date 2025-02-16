@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface TableDataT {
   rows: any[];
   count: number;
@@ -38,5 +40,5 @@ export type ModalDataFieldT = {
 
 export type ModalDataFieldSelectOptionsT = {
   value: any;
-  label: string;
+  label: string | React.ReactNode;
 };

@@ -3,6 +3,7 @@ import { SetStateAction } from 'react';
 import { TextField } from '@/shared/ui/TextField';
 import styles from './DataAction.module.sass';
 import { Button } from '@/shared/ui/Button/ui/Button';
+import { Select } from '@/shared/ui/Select/ui/Select';
 
 interface DataActionProps {
   title?: string;
@@ -34,11 +35,32 @@ export const DataAction: React.FC<DataActionProps> = ({
       },
     }));
   };
+
   return (
     <form className={styles.action} onSubmit={onSubmit}>
       <h2>{`${modalData.type === 'add' ? 'Добавление' : 'Редактирование'} ${title}`}</h2>
       <div className={styles.action_form}>
         {Object.entries(modalData.fields).map(([key, field]) => {
+          if (field.type === 'select') {
+            return (
+              <Select
+                label={field.label}
+                placeholder={field.placeholder}
+                name={key}
+                value={modalData.values[key]}
+                isError={modalData.validation.error[key]}
+                helperText={modalData.validation.message[key]}
+                onChange={(option) =>
+                  setModalData((prev) => ({
+                    ...prev,
+                    values: { ...prev.values, [key]: option.value },
+                  }))
+                }
+                options={field.options || []}
+              />
+            );
+          }
+
           return (
             <TextField
               label={field.label}
