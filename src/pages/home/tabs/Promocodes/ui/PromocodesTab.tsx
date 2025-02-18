@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Table } from '@/widgets/table';
 import { columns } from '../config/columns';
-import { ViewIcon, TicketIcon, EditIcon } from '@/shared/ui/icons';
+import { TicketIcon, EditIcon } from '@/shared/ui/icons';
 import { TableDataT } from '@/shared/types';
-import { BrandService } from '@/shared/api/services/BrandService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
 import { PromocodeService } from '@/shared/api/services';
 
 export const PromocodesTab = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -36,7 +34,7 @@ export const PromocodesTab = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     PromocodeService.getPromocodes({ ...data.pagination, ...data.filters })
       .then((resp) => {
         setData((prev) => ({
@@ -46,7 +44,7 @@ export const PromocodesTab = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 

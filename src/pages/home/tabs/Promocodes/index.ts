@@ -1,1 +1,1 @@
-export { CancaledPackagesTab } from './ui/CanceledPackagesTabs'
+export { PromocodesTab } from './ui/PromocodesTab';

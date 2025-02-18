@@ -105,7 +105,6 @@ export const CategoriesPage = () => {
         try {
           const response = await DepartmentService.createDepartment({
             ...modalData.values,
-            parent: modalData.values.department,
           });
           // if (modalData.values.department) {
           //   const

@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import styles from './Select.module.sass';
 import { useState, useEffect, useRef } from 'react';
-import { TextField } from '@/shared/ui/TextField';
 import { ChevronDown } from '@/shared/ui/icons';
 
 type SelectOptionItemT = {
@@ -25,9 +24,7 @@ interface TextFieldProps {
 
 export const Select: React.FC<TextFieldProps> = ({
   label,
-  placeholder,
   value,
-  required,
   name,
   helperText,
   isError,
@@ -53,7 +50,15 @@ export const Select: React.FC<TextFieldProps> = ({
   }, []);
 
   return (
-    <div className={clsx(styles.select, className, isError && styles.error)} ref={selectRef}>
+    <div
+      className={clsx(
+        styles.select,
+        className,
+        isError && styles.error,
+        disabled && styles.disabled
+      )}
+      ref={selectRef}
+    >
       {label && <p className={styles.label_text}>{label}</p>}
       <div className={styles.select_title} onClick={() => setIsOpen(!isOpen)}>
         <div

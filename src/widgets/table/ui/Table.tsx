@@ -105,6 +105,7 @@ export const Table: React.FC<TableProps> = ({
                   className={styles.sort_btn}
                   onClick={() => {
                     const rowValue = table.rows.find((rowItem) => rowItem[column.field]);
+
                     setTable((prev) => ({
                       ...prev,
                       filters: {

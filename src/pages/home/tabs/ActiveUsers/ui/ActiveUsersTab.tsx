@@ -7,7 +7,6 @@ import { UserService } from '@/shared/api/services/UserService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
 
 export const ActiveUsersTab = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -25,7 +24,7 @@ export const ActiveUsersTab = () => {
     },
   });
 
-  const updateUserStatus = (id: number, status: boolean) => {
+  const updateUserStatus = (id: number) => {
     setData((prev) => {
       const prevRowsCopy = [...prev.rows];
       return {
@@ -36,7 +35,7 @@ export const ActiveUsersTab = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     UserService.getUsers({ ...data.pagination, is_active: true })
       .then((resp) => {
         setData((prev) => ({
@@ -46,7 +45,7 @@ export const ActiveUsersTab = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 
@@ -67,12 +66,12 @@ export const ActiveUsersTab = () => {
                   value={row.is_active}
                   onChange={(e) => {
                     const value = e.target.checked;
-                    updateUserStatus(row.id, value);
+                    updateUserStatus(row.id);
                     UserService.updateUserStatus({
                       is_active: value,
                       id: row.id,
                     }).catch(() => {
-                      updateUserStatus(row.id, !value);
+                      updateUserStatus(row.id);
                     });
                   }}
                 />

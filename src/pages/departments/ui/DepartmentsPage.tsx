@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ModalDataT, TableDataT } from '@shared/types';
 import { Table } from '@widgets/table';
 import { columns } from '../config/columns';
-import { EditIcon, ViewIcon } from '@shared/ui/icons';
+import { EditIcon } from '@shared/ui/icons';
 import { DepartmentService } from '@shared/api/services/DepartmentService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
 import { Button } from '@shared/ui/Button/ui/Button';

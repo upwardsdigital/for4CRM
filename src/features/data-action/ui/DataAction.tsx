@@ -75,7 +75,9 @@ export const DataAction: React.FC<DataActionProps> = ({
         })}
       </div>
 
-      <Button>{modalData.type === 'add' ? 'Добавить' : 'Редактировать'}</Button>
+      <Button loading={modalData.isRequested}>
+        {modalData.type === 'add' ? 'Добавить' : 'Редактировать'}
+      </Button>
     </form>
   );
 };

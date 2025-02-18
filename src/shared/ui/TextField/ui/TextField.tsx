@@ -34,7 +34,6 @@ export const TextField: React.FC<TextFieldProps> = ({
   rightIcon,
   leftIcon,
   isError,
-  disabled,
   helperText,
   onChange,
   onClick,
