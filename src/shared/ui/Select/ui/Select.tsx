@@ -16,6 +16,7 @@ interface TextFieldProps {
   name?: string;
   helperText?: string;
   isError?: boolean;
+  loading?: boolean;
   disabled?: boolean;
   className?: string;
   options?: SelectOptionItemT[];
@@ -28,12 +29,15 @@ export const Select: React.FC<TextFieldProps> = ({
   name,
   helperText,
   isError,
+  placeholder,
+  loading,
   disabled,
   className,
   options,
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedValue, setSelectedValue] = useState<any>(null);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -48,6 +52,17 @@ export const Select: React.FC<TextFieldProps> = ({
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (options) {
+      const selectedOption = options.find((option) => option.value === value);
+      if (selectedOption) {
+        setSelectedValue(selectedOption);
+      }
+    } else {
+      setSelectedValue('');
+    }
+  }, [value, options]);
 
   return (
     <div
@@ -68,8 +83,11 @@ export const Select: React.FC<TextFieldProps> = ({
           // required={required}
           // disabled={disabled}
         >
-          {(options && options.find((option) => option.value === value)?.label) ||
-            `Select ${name ? name : 'option'}`}
+          {selectedValue
+            ? selectedValue.label
+            : placeholder
+            ? placeholder
+            : `Select ${name ? name : 'option'}`}
         </div>
         <ChevronDown />
       </div>

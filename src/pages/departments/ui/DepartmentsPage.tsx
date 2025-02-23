@@ -13,6 +13,9 @@ import { Modal } from '@shared/ui/Modal';
 import { DataAction } from '@features/data-action/ui/DataAction';
 import { initialModalData } from '../model/initialModalData';
 import { toast } from 'react-toastify';
+import { DeleteIcon } from '@/shared/ui/icons/DeleteIcon';
+import { DeleteModal } from '@/features/delete-modal';
+import { useModal } from '@/shared/hooks';
 
 export const DepartmentsPage = () => {
   const [data, setData] = useState<TableDataT>({
@@ -33,6 +36,7 @@ export const DepartmentsPage = () => {
   });
 
   const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
+  const { openModal, closeModal } = useModal();
 
   const fetchData = async () => {
     try {
@@ -150,6 +154,37 @@ export const DepartmentsPage = () => {
                     />
                     <button onClick={() => handleEdit(row)}>
                       <EditIcon />
+                    </button>
+                    <button
+                      onClick={() =>
+                        openModal(
+                          'delete-department-modal',
+                          <DeleteModal
+                            title="Удалить категорию"
+                            onCancel={() => closeModal('delete-department-modal')}
+                            onSubmit={() => {
+                              DepartmentService.deleteDepartment(row.id)
+                                .then(() => {
+                                  toast('Успешно удалено', { type: 'success' });
+                                  setData((prev) => {
+                                    const prevRows = [...prev.rows];
+                                    const rowIndex = prevRows.findIndex(
+                                      (rowItem) => rowItem.id === row.id
+                                    );
+                                    prevRows.splice(rowIndex, 1);
+                                    return { ...prev, rows: prevRows };
+                                  });
+                                  closeModal('delete-department-modal');
+                                })
+                                .catch(() => {
+                                  toast('Возникла ошибка при удалении', { type: 'error' });
+                                });
+                            }}
+                          />
+                        )
+                      }
+                    >
+                      <DeleteIcon />
                     </button>
                   </div>
                 );

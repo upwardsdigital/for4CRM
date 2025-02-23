@@ -1,4 +1,5 @@
-import { CheckListIcon, MenuIcon } from '@/shared/ui/icons';
+import { CheckListIcon, FilterIcon, ImageIcon, MenuIcon } from '@/shared/ui/icons';
+import { CombineCellsIcon } from '@/shared/ui/icons/CombineCellsIcon';
 import { BiHome } from 'react-icons/bi';
 
 export const links = [
@@ -38,5 +39,20 @@ export const links = [
         pathname: '/inner-categories',
       },
     ],
+  },
+  {
+    title: 'Дополнительные фильтры',
+    icon: <FilterIcon />,
+    pathname: '/additional-filters',
+  },
+  {
+    title: 'Комбинации',
+    icon: <CombineCellsIcon />,
+    pathname: '/combinations',
+  },
+  {
+    title: 'Баннеры',
+    icon: <ImageIcon />,
+    pathname: '/banners',
   },
 ];

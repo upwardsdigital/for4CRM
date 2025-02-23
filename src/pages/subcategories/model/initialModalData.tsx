@@ -15,6 +15,11 @@ export const initialModalData: ModalDataT = {
       label: 'Подотдел',
       options: [],
     },
+    category: {
+      type: 'select',
+      label: 'Категория',
+      options: [],
+    },
     is_active: {
       type: 'select',
       label: 'Статус',

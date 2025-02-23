@@ -15,7 +15,6 @@ export const initialModalData: ModalDataT = {
       label: 'Подотдел',
       options: [],
     },
-
     name_ru: {
       type: 'text',
       required: true,

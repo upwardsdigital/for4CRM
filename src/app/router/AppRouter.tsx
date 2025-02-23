@@ -8,6 +8,9 @@ import { SubdepartmentsPage } from '@/pages/subdepartments';
 import { CategoriesPage } from '@/pages/categories';
 import { SubcategoriesPage } from '@/pages/subcategories';
 import { InnercategoriesPage } from '@/pages/innercategories';
+import { BannersPage } from '@/pages/banners';
+import { AdditionalFilters } from '@/pages/additional-filters';
+import { CombinationsPage } from '@/pages/combinations';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +40,18 @@ const router = createBrowserRouter([
       {
         path: '/inner-categories',
         element: <InnercategoriesPage />,
+      },
+      {
+        path: '/additional-filters',
+        element: <AdditionalFilters />,
+      },
+      {
+        path: '/combinations',
+        element: <CombinationsPage />,
+      },
+      {
+        path: '/banners',
+        element: <BannersPage />,
       },
     ],
   },

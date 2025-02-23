@@ -13,6 +13,11 @@ import { Modal } from '@shared/ui/Modal';
 import { DataAction } from '@features/data-action/ui/DataAction';
 import { initialModalData } from '../model/initialModalData';
 import { toast } from 'react-toastify';
+import { TextField } from '@/shared/ui/TextField';
+import { DepartmentSelector } from '@/entities/department';
+import { DeleteIcon } from '@/shared/ui/icons/DeleteIcon';
+import { useModal } from '@/shared/hooks';
+import { DeleteModal } from '@/features/delete-modal';
 
 export const CategoriesPage = () => {
   const [data, setData] = useState<TableDataT>({
@@ -33,6 +38,7 @@ export const CategoriesPage = () => {
   });
 
   const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
+  const { openModal, closeModal } = useModal();
 
   const fetchData = async () => {
     try {
@@ -55,35 +61,6 @@ export const CategoriesPage = () => {
       }));
     }
   };
-
-  useEffect(() => {
-    const loadDepartments = async () => {
-      const departmentOptions = await DepartmentService.getDepartments({ type: 0 });
-      const subDepartmentOptions = await DepartmentService.getDepartments({ type: 1 });
-      setModalData((prevData) => ({
-        ...prevData,
-        fields: {
-          ...prevData.fields,
-          department: {
-            ...prevData.fields.department,
-            options: departmentOptions.data.items.map((item) => ({
-              label: item.name.length > 0 ? item.name : 'Без названия',
-              value: item.id,
-            })),
-          },
-          subDepartment: {
-            ...prevData.fields.subDepartment,
-            options: subDepartmentOptions.data.items.map((item) => ({
-              label: item.name.length > 0 ? item.name : 'Без названия',
-              value: item.id,
-            })),
-          },
-        },
-      }));
-    };
-
-    loadDepartments();
-  }, [modalData.isOpen]);
 
   useEffect(() => {
     fetchData();
@@ -146,6 +123,24 @@ export const CategoriesPage = () => {
   const handleModalOpen = () =>
     setModalData((prev) => ({ ...prev, ...initialModalData, isOpen: !prev.isOpen }));
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setModalData((prev) => ({
+      ...prev,
+      values: { ...prev.values, [e.target.name]: e.target.value },
+      validation: {
+        ...prev.validation,
+        error: {
+          ...prev.validation.error,
+          [e.target.name]: false,
+        },
+        message: {
+          ...prev.validation.message,
+          [e.target.name]: '',
+        },
+      },
+    }));
+  };
+
   return (
     <div className={clsx(styles.page, 'page')}>
       <div className="page-header">
@@ -188,6 +183,37 @@ export const CategoriesPage = () => {
                     <button onClick={() => handleEdit(row)}>
                       <EditIcon />
                     </button>
+                    <button
+                      onClick={() =>
+                        openModal(
+                          'delete-category-modal',
+                          <DeleteModal
+                            title="Удалить категорию"
+                            onCancel={() => closeModal('delete-category-modal')}
+                            onSubmit={() => {
+                              DepartmentService.deleteDepartment(row.id)
+                                .then(() => {
+                                  toast('Успешно удалено', { type: 'success' });
+                                  setData((prev) => {
+                                    const prevRows = [...prev.rows];
+                                    const rowIndex = prevRows.findIndex(
+                                      (rowItem) => rowItem.id === row.id
+                                    );
+                                    prevRows.splice(rowIndex, 1);
+                                    return { ...prev, rows: prevRows };
+                                  });
+                                  closeModal('delete-category-modal');
+                                })
+                                .catch(() => {
+                                  toast('Возникла ошибка при удалении', { type: 'error' });
+                                });
+                            }}
+                          />
+                        )
+                      }
+                    >
+                      <DeleteIcon />
+                    </button>
                   </div>
                 );
               },
@@ -202,7 +228,31 @@ export const CategoriesPage = () => {
           modalData={modalData}
           setModalData={setModalData}
           onSubmit={handleModalSubmit}
-        />
+        >
+          <>
+            <DepartmentSelector
+              isOpen={modalData.isOpen}
+              initialValues={modalData}
+              setValues={setModalData}
+            />
+            <TextField
+              label={modalData.fields.name_ru.label}
+              name={'name_ru'}
+              value={modalData.values.name_ru}
+              isError={modalData.validation.error.name_ru}
+              helperText={modalData.validation.message.name_ru}
+              onChange={onChange}
+            />
+            <TextField
+              label={modalData.fields.name.label}
+              name={'name'}
+              value={modalData.values.name}
+              isError={modalData.validation.error.name}
+              helperText={modalData.validation.message.name}
+              onChange={onChange}
+            />
+          </>
+        </DataAction>
       </Modal>
     </div>
   );

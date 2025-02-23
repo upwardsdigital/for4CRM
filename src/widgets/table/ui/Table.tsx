@@ -67,6 +67,7 @@ export const Table: React.FC<TableProps> = ({
   };
 
   const totalPages = Math.ceil(table.count / paginationModel.pageSize);
+  console.log(totalPages);
 
   return (
     <div className={`table-container ${className}`}>
@@ -167,6 +168,7 @@ export const Table: React.FC<TableProps> = ({
           '& .MuiDataGrid-columnHeaderTitleContainer': {
             flexDirection: 'row !important',
             fontWeight: '600 !important',
+            whiteSpace: 'normal',
           },
           '& .MuiDataGrid-cell': {
             textAlign: 'left !important',
@@ -215,7 +217,9 @@ export const Table: React.FC<TableProps> = ({
             </button>
 
             <button
-              disabled={paginationModel.page === totalPages - 1}
+              disabled={
+                paginationModel.page === totalPages || paginationModel.page === totalPages - 1
+              }
               onClick={() =>
                 handlePaginationChange({
                   ...paginationModel,
@@ -226,7 +230,9 @@ export const Table: React.FC<TableProps> = ({
               <ChevronRight />
             </button>
             <button
-              disabled={paginationModel.page === totalPages - 1}
+              disabled={
+                paginationModel.page === totalPages || paginationModel.page === totalPages - 1
+              }
               onClick={() =>
                 handlePaginationChange({
                   ...paginationModel,

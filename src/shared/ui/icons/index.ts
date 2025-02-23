@@ -13,3 +13,5 @@ export { TagIcon } from './TagIcon';
 export { TicketIcon } from './TicketIcon';
 export { MenuIcon } from './MenuIcon';
 export { CheckListIcon } from './CheckListIcon';
+export { ImageIcon } from './ImageIcon';
+export { FilterIcon } from './FilterIcon';
