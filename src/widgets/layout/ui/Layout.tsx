@@ -1,8 +1,8 @@
-import styles from './Layout.module.sass';
+import { CrmSidebar } from '@/widgets/crm-sidebar';
 import { Navbar } from '@/widgets/navbar';
-import { Sidebar } from '@/widgets/sidebar';
 import { Outlet } from 'react-router-dom';
-import { ToastContainer, Bounce } from 'react-toastify';
+import { Bounce, ToastContainer } from 'react-toastify';
+import styles from './Layout.module.sass';
 
 export const Layout = () => {
   return (
@@ -21,7 +21,8 @@ export const Layout = () => {
         transition={Bounce}
       />
       <div className={styles.layout}>
-        <Sidebar />
+        {/* <Sidebar /> */}
+        <CrmSidebar />
         <div className={styles.content}>
           <Navbar />
           <main className={styles.main}>

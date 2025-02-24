@@ -1,13 +1,14 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ModalProvider } from '@/shared/providers/ModalProvider';
 import { Layout } from '@/widgets/layout';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { HomePage } from '@/pages/home';
-import { DepartmentsPage } from '@/pages/departments';
-import { SubdepartmentsPage } from '@/pages/subdepartments';
 import { CategoriesPage } from '@/pages/categories';
-import { SubcategoriesPage } from '@/pages/subcategories';
+import { ClientsPage } from '@/pages/clients';
+import { DepartmentsPage } from '@/pages/departments';
+import { HomePage } from '@/pages/home';
 import { InnercategoriesPage } from '@/pages/innercategories';
+import { SubcategoriesPage } from '@/pages/subcategories';
+import { SubdepartmentsPage } from '@/pages/subdepartments';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: '/inner-categories',
         element: <InnercategoriesPage />,
+      },
+      {
+        path: '/clients',
+        element: <ClientsPage />,
       },
     ],
   },
