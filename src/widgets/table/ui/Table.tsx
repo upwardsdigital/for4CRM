@@ -67,7 +67,6 @@ export const Table: React.FC<TableProps> = ({
   };
 
   const totalPages = Math.ceil(table.count / paginationModel.pageSize);
-  console.log(totalPages);
 
   return (
     <div className={`table-container ${className}`}>

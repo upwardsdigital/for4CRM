@@ -63,35 +63,6 @@ export const SubcategoriesPage = () => {
   };
 
   useEffect(() => {
-    const loadDepartments = async () => {
-      const departmentOptions = await DepartmentService.getDepartments({ type: 0 });
-      const subDepartmentOptions = await DepartmentService.getDepartments({ type: 1 });
-      setModalData((prevData) => ({
-        ...prevData,
-        fields: {
-          ...prevData.fields,
-          department: {
-            ...prevData.fields.department,
-            options: departmentOptions.data.items.map((item) => ({
-              label: item.name.length > 0 ? item.name : 'Без названия',
-              value: item.id,
-            })),
-          },
-          subDepartment: {
-            ...prevData.fields.subDepartment,
-            options: subDepartmentOptions.data.items.map((item) => ({
-              label: item.name.length > 0 ? item.name : 'Без названия',
-              value: item.id,
-            })),
-          },
-        },
-      }));
-    };
-
-    loadDepartments();
-  }, [modalData.isOpen]);
-
-  useEffect(() => {
     fetchData();
   }, [data.filters, data.pagination]);
 

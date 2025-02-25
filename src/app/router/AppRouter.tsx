@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ModalProvider } from '@/shared/providers/ModalProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from '@/widgets/layout';
 
 import { HomePage } from '@/pages/home';
@@ -13,54 +14,63 @@ import { AdditionalFilters } from '@/pages/additional-filters';
 import { CombinationsPage } from '@/pages/combinations';
 
 const router = createBrowserRouter([
+  { path: '/', element: <>hello world</> },
   {
-    path: '/',
+    path: '/admin',
     element: <Layout />,
     children: [
       {
-        path: '/home',
+        index: true,
         element: <HomePage />,
       },
       {
-        path: '/departments',
+        path: 'departments',
         element: <DepartmentsPage />,
       },
       {
-        path: '/sub-departments',
+        path: 'sub-departments',
         element: <SubdepartmentsPage />,
       },
       {
-        path: '/categories',
+        path: 'categories',
         element: <CategoriesPage />,
       },
       {
-        path: '/sub-categories',
+        path: 'sub-categories',
         element: <SubcategoriesPage />,
       },
       {
-        path: '/inner-categories',
+        path: 'inner-categories',
         element: <InnercategoriesPage />,
       },
       {
-        path: '/additional-filters',
+        path: 'additional-filters',
         element: <AdditionalFilters />,
       },
       {
-        path: '/combinations',
+        path: 'combinations',
         element: <CombinationsPage />,
       },
       {
-        path: '/banners',
+        path: 'banners',
         element: <BannersPage />,
       },
     ],
   },
+  {
+    path: '/crm',
+    element: <Layout />,
+  },
 ]);
+
+const queryClient = new QueryClient();
 
 export const AppRouter = () => {
   return (
-    <ModalProvider>
-      <RouterProvider router={router} />
-    </ModalProvider>
+    <QueryClientProvider client={queryClient}>
+      <ModalProvider>
+        <RouterProvider router={router} />
+      </ModalProvider>
+    </QueryClientProvider>
   );
 };

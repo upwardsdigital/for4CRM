@@ -20,7 +20,11 @@ export const TabContent = () => {
   });
   const [departmentsData, setDepartmentsData] = useState<any>({
     department: [],
+    subDepartment: [],
     category: [],
+    subCategory: [],
+    innerCategory: [],
+    brands: [],
   });
 
   useEffect(() => {
@@ -168,15 +172,53 @@ export const TabContent = () => {
           className={styles.field}
         />
         <Select
+          label="Подотдел"
+          value={data.values.subDepartment}
+          options={departmentsData.subDepartment.map((item) => ({
+            ...item,
+            label: item.name,
+            value: item.id,
+          }))}
+          name="subDepartment"
+          onChange={(option) => handleSelectChange(option, 'subDepartment')}
+          className={styles.field}
+        />
+
+        <Select
           label="Категория"
-          value={data.values.department}
+          value={data.values.category}
           options={departmentsData.category.map((item) => ({
             ...item,
             label: item.name,
             value: item.id,
           }))}
-          name="department"
-          onChange={(option) => handleSelectChange(option, 'department')}
+          name="category"
+          onChange={(option) => handleSelectChange(option, 'category')}
+          className={styles.field}
+        />
+
+        <Select
+          label="Подкатегория"
+          value={data.values.subCategory}
+          options={departmentsData.subCategory.map((item) => ({
+            ...item,
+            label: item.name,
+            value: item.id,
+          }))}
+          name="subCategory"
+          onChange={(option) => handleSelectChange(option, 'subCategory')}
+          className={styles.field}
+        />
+        <Select
+          label="Брэнд"
+          value={data.values.brand}
+          options={departmentsData.brands.map((item) => ({
+            ...item,
+            label: item.name,
+            value: item.id,
+          }))}
+          name="brand"
+          onChange={(option) => handleSelectChange(option, 'brand')}
           className={styles.field}
         />
         <TextField

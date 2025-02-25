@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loadDepartments } from '../api/departmentService';
 import { Select } from '@/shared/ui/Select/ui/Select';
+import { useQuery } from '@tanstack/react-query';
 
 const departmentKeys = [
   'department',
@@ -12,72 +13,97 @@ const departmentKeys = [
 ];
 
 export const DepartmentSelector = ({ isOpen, initialValues, setValues }) => {
-  const [departmentsData, setDepartmentsData] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  // const [departmentsData, setDepartmentsData] = useState<any>({});
+  const {
+    isPending,
+    isError,
+    data: departmentsData,
+    error,
+  } = useQuery({
+    queryKey: ['departments-dictionary'],
+    queryFn: async () => {
+      const data = await loadDepartments();
+      return data;
+    },
+  });
 
   useEffect(() => {
-    const fetchDepartments = async () => {
-      setLoading(true);
-      const data = await loadDepartments();
-      setDepartmentsData(data);
-      setLoading(false);
-
+    if (departmentsData) {
       loadChildren(null, 'department');
-    };
-    fetchDepartments();
-  }, [isOpen]);
+      // const currentLevelData = departmentsData.department || [];
+      // return setValues((prev) => ({
+      //   ...prev,
+      //   fields: {
+      //     ...prev.fields,
+      //     department: {
+      //       ...prev.fields.department,
+      //       options: currentLevelData,
+      //     },
+      //   },
+      // }));
+    }
+  }, [isOpen, departmentsData]);
 
   const loadChildren = (parentValue: string | null, type: string) => {
     let currentKey = type;
     let currentLevelData = departmentsData[currentKey] || [];
 
-    if (type === 'deparment') {
-      setValues((prev) => ({
-        ...prev,
-        fields: {
-          ...prev.fields,
-          [currentKey]: {
-            ...prev.fields[currentKey],
-            options: currentLevelData,
-          },
-        },
-      }));
-    }
+    setValues((prev) => {
+      let newValues = { ...prev };
+      const index = departmentKeys.findIndex((key) => key === type);
+      for (let i = index; i < departmentKeys.length; i++) {
+        currentKey = departmentKeys[i];
 
-    if (parentValue !== undefined) {
-      for (const department in departmentsData[type]) {
-        if (departmentsData[type].length > 0 && initialValues.fields[type]) {
-          currentLevelData = departmentsData[type].filter((item) => item.parent_id === parentValue);
+        if (departmentsData[currentKey].length > 0 && initialValues.fields[currentKey]) {
+          currentLevelData =
+            currentKey === 'department'
+              ? departmentsData[currentKey]
+              : departmentsData[currentKey].filter((item) => item.parent_id === parentValue);
 
-          setValues((prev) => {
-            const newValues = {
-              ...prev,
-              fields: {
-                ...prev.fields,
-                [currentKey]: {
-                  ...prev.fields[currentKey],
-                  options: currentLevelData,
-                },
+          newValues = {
+            ...newValues,
+            fields: {
+              ...newValues.fields,
+              [currentKey]: {
+                ...newValues.fields[currentKey],
+                options: currentLevelData,
               },
-            };
+            },
+          };
 
-            const departmentNumbers = departmentKeys.map((item, index) => index);
-
-            for (
-              let index = departmentKeys.findIndex((key) => key === currentKey);
-              index < departmentNumbers.length;
-              index++
-            ) {
-              if (initialValues.fields[departmentKeys[index]] && initialValues.isEdited) {
-                newValues.values = { ...newValues.values, [departmentKeys[index]]: null };
-              }
+          console.log(newValues);
+          const departmentNumbers = departmentKeys.map((item, index) => index);
+          for (
+            let index = departmentKeys.findIndex((key) => key === currentKey);
+            index < departmentNumbers.length;
+            index++
+          ) {
+            if (initialValues.fields[departmentKeys[index]] && initialValues.isEdited) {
+              newValues.values = { ...newValues.values, [departmentKeys[index]]: null };
             }
-            return newValues;
-          });
-          break;
+          }
+          // return newValues;
         }
       }
-    }
+
+      const currentKeyIndex = departmentKeys.findIndex((key) => key === currentKey);
+      for (let i = currentKeyIndex; i < departmentKeys.length; i++) {
+        currentKey = departmentKeys[currentKeyIndex];
+        if (initialValues.fields[currentKey]) {
+          newValues = {
+            ...newValues,
+            fields: {
+              ...newValues.fields,
+              [currentKey]: {
+                ...newValues.fields[currentKey],
+                options: [],
+              },
+            },
+          };
+        }
+      }
+      return newValues;
+    });
   };
 
   const handleChange = (option, type) => {
@@ -125,7 +151,11 @@ export const DepartmentSelector = ({ isOpen, initialValues, setValues }) => {
 
   return (
     <>
-      {loading ? <div style={{ gridColumn: 'span 2' }}>Загрузка отделов...</div> : renderSelects()}
+      {isPending ? (
+        <div style={{ gridColumn: 'span 2' }}>Загрузка отделов...</div>
+      ) : (
+        renderSelects()
+      )}
     </>
   );
 };

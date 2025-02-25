@@ -1,10 +1,15 @@
 import styles from './Layout.module.sass';
 import { Navbar } from '@/widgets/navbar';
 import { Sidebar } from '@/widgets/sidebar';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer, Bounce } from 'react-toastify';
 
-export const Layout = () => {
+interface LayoutProps {
+  isCrm?: boolean;
+}
+
+export const Layout: React.FC<LayoutProps> = ({ isCrm }) => {
   return (
     <>
       <ToastContainer
@@ -21,7 +26,7 @@ export const Layout = () => {
         transition={Bounce}
       />
       <div className={styles.layout}>
-        <Sidebar />
+        {isCrm ? <>sidebar</> : <Sidebar />}
         <div className={styles.content}>
           <Navbar />
           <main className={styles.main}>
