@@ -3,6 +3,7 @@ import styles from './TextField.module.sass';
 import { TextFieldNumberArrows } from './TextFieldNumberArrows';
 import clsx from 'clsx';
 import { SearchIcon } from '../../icons/SearchIcon';
+import { FiPlus, FiTrash } from 'react-icons/fi';
 
 interface TextFieldProps {
   value: any;
@@ -18,6 +19,8 @@ interface TextFieldProps {
   isError?: boolean;
   helperText?: string;
   disabled?: boolean;
+  hideArrows?: boolean;
+  onDeleteFile?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClick?: () => void;
 }
@@ -34,12 +37,45 @@ export const TextField: React.FC<TextFieldProps> = ({
   rightIcon,
   leftIcon,
   isError,
-  disabled,
   helperText,
+  hideArrows,
+  onDeleteFile,
   onChange,
   onClick,
 }) => {
-  return (
+  const handleFileDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDeleteFile) {
+      onDeleteFile();
+    }
+  };
+
+  const renderFileInput = () => (
+    <label className={clsx(styles.label, className, isError && styles.error)}>
+      {label && <p className={styles.label_text}>{label}</p>}
+      <div className={styles.field_wrap}>
+        <input name={name} type="file" className={styles.file} onChange={onChange} />
+        {leftIcon}
+        {value ? (
+          <button
+            type="button"
+            className={clsx(styles.file_item, styles.active)}
+            onClick={handleFileDeleteClick}
+          >
+            <p>{value.name}</p> <FiTrash color="#AEB2B8" />
+          </button>
+        ) : (
+          <span className={clsx(styles.file_item)}>
+            <p>Выберите файл</p> <FiPlus color="#AEB2B8" />
+          </span>
+        )}
+        {rightIcon}
+      </div>
+      {helperText && <p className={styles.helper}>{helperText}</p>}
+    </label>
+  );
+
+  const renderInputField = () => (
     <label className={clsx(styles.label, className, isError && styles.error)}>
       {label && <p className={styles.label_text}>{label}</p>}
       <div className={styles.field_wrap}>
@@ -55,10 +91,14 @@ export const TextField: React.FC<TextFieldProps> = ({
           onChange={onChange}
           onClick={onClick}
         />
-        {type === 'number' && <TextFieldNumberArrows value={value} onChange={onChange} />}
+        {type === 'number' && !hideArrows && (
+          <TextFieldNumberArrows value={value} onChange={onChange} />
+        )}
         {rightIcon}
       </div>
       {helperText && <p className={styles.helper}>{helperText}</p>}
     </label>
   );
+
+  return type === 'file' ? renderFileInput() : renderInputField();
 };

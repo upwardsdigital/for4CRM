@@ -1,5 +1,4 @@
 import { ModalDataT } from '@/shared/types';
-import { DepartmentService } from '@/shared/api/services';
 
 export const initialModalData: ModalDataT = {
   isOpen: false,

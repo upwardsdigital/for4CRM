@@ -7,6 +7,34 @@
   padding: 10px 20px
   position: relative
   min-height: 45px
+  height: 45px
+
+  .file_item
+    display: flex !important
+    align-items: center
+    gap: 5px
+    padding: 6px 10px
+    border-radius: 100px
+    background: #FAFAFA
+    font-size: 12px
+    cursor: pointer
+    transition: .3s background
+
+    p
+      overflow: hidden
+      display: inline-block
+      text-overflow: ellipsis
+      white-space: nowrap
+      max-width: 160px
+
+    &:hover
+      background: #eaeaea
+
+    &.active
+      color: var(--black)
+
+  .file
+    display: none
 
   .field
     width: max-content

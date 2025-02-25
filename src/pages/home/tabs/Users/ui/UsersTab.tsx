@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Table } from '@/widgets/table';
 import { columns } from '../config/columns';
-import { EditIcon, ViewIcon } from '@/shared/ui/icons';
 import { TableDataT } from '@/shared/types';
 import { UserService } from '@/shared/api/services/UserService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
+import { ViewIcon } from '@/shared/ui/icons';
 
 export const UsersTab = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -35,7 +34,7 @@ export const UsersTab = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     UserService.getUsers(data.pagination)
       .then((resp) => {
         setData((prev) => ({
@@ -45,7 +44,7 @@ export const UsersTab = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 

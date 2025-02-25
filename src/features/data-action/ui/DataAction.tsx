@@ -8,6 +8,7 @@ import { Select } from '@/shared/ui/Select/ui/Select';
 interface DataActionProps {
   title?: string;
   modalData: ModalDataT;
+  children?: React.ReactNode;
   setModalData: React.Dispatch<SetStateAction<ModalDataT>>;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -15,6 +16,7 @@ interface DataActionProps {
 export const DataAction: React.FC<DataActionProps> = ({
   title,
   modalData,
+  children,
   setModalData,
   onSubmit,
 }) => {
@@ -40,42 +42,46 @@ export const DataAction: React.FC<DataActionProps> = ({
     <form className={styles.action} onSubmit={onSubmit}>
       <h2>{`${modalData.type === 'add' ? 'Добавление' : 'Редактирование'} ${title}`}</h2>
       <div className={styles.action_form}>
-        {Object.entries(modalData.fields).map(([key, field]) => {
-          if (field.type === 'select') {
+        {children}
+        {children === undefined &&
+          Object.entries(modalData.fields).map(([key, field]) => {
+            if (field.type === 'select') {
+              return (
+                <Select
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  name={key}
+                  value={modalData.values[key]}
+                  isError={modalData.validation.error[key]}
+                  helperText={modalData.validation.message[key]}
+                  onChange={(option) =>
+                    setModalData((prev) => ({
+                      ...prev,
+                      values: { ...prev.values, [key]: option.value },
+                    }))
+                  }
+                  options={field.options || []}
+                />
+              );
+            }
+
             return (
-              <Select
+              <TextField
                 label={field.label}
                 placeholder={field.placeholder}
                 name={key}
                 value={modalData.values[key]}
                 isError={modalData.validation.error[key]}
                 helperText={modalData.validation.message[key]}
-                onChange={(option) =>
-                  setModalData((prev) => ({
-                    ...prev,
-                    values: { ...prev.values, [key]: option.value },
-                  }))
-                }
-                options={field.options || []}
+                onChange={onChange}
               />
             );
-          }
-
-          return (
-            <TextField
-              label={field.label}
-              placeholder={field.placeholder}
-              name={key}
-              value={modalData.values[key]}
-              isError={modalData.validation.error[key]}
-              helperText={modalData.validation.message[key]}
-              onChange={onChange}
-            />
-          );
-        })}
+          })}
       </div>
 
-      <Button>{modalData.type === 'add' ? 'Добавить' : 'Редактировать'}</Button>
+      <Button loading={modalData.isRequested}>
+        {modalData.type === 'add' ? 'Добавить' : 'Редактировать'}
+      </Button>
     </form>
   );
 };

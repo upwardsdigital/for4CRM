@@ -1,5 +1,4 @@
 import { ModalDataT } from '@/shared/types';
-import { DepartmentService } from '@/shared/api/services';
 
 export const initialModalData: ModalDataT = {
   isOpen: false,
@@ -15,6 +14,17 @@ export const initialModalData: ModalDataT = {
       type: 'select',
       label: 'Подотдел',
       options: [],
+    },
+    name_ru: {
+      type: 'text',
+      required: true,
+      label: 'Название подотдела (рус.)',
+      placeholder: 'Название',
+    },
+    name: {
+      type: 'text',
+      label: 'Название подотдела (анг.)',
+      placeholder: 'Название',
     },
     is_active: {
       type: 'select',
@@ -38,17 +48,6 @@ export const initialModalData: ModalDataT = {
         },
       ],
       placeholder: 'Выберите статус',
-    },
-    name_ru: {
-      type: 'text',
-      required: true,
-      label: 'Название подотдела (рус.)',
-      placeholder: 'Название',
-    },
-    name: {
-      type: 'text',
-      label: 'Название подотдела (анг.)',
-      placeholder: 'Название',
     },
   },
   values: {

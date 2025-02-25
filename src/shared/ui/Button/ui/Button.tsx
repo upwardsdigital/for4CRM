@@ -27,7 +27,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={loading || disabled}
       style={style}
     >
-      {children}
+      {loading ? 'Загрузка...' : children}
     </button>
   );
 };

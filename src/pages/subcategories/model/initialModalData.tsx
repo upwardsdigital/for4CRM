@@ -1,5 +1,4 @@
 import { ModalDataT } from '@/shared/types';
-import { DepartmentService } from '@/shared/api/services';
 
 export const initialModalData: ModalDataT = {
   isOpen: false,
@@ -14,6 +13,11 @@ export const initialModalData: ModalDataT = {
     subDepartment: {
       type: 'select',
       label: 'Подотдел',
+      options: [],
+    },
+    category: {
+      type: 'select',
+      label: 'Категория',
       options: [],
     },
     is_active: {

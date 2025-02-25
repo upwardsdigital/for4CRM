@@ -8,7 +8,6 @@ import { OrderDetailsModal } from '@/pages/home/modals/OrderDetailsModal';
 import { TableDataT } from '@/shared/types';
 
 export const CanceledPackages = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -29,7 +28,7 @@ export const CanceledPackages = () => {
   const { openModal } = useModal();
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     OrderService.getOrders({ ...data.pagination, ...data.filters })
       .then((resp) => {
         setData((prev) => ({
@@ -39,7 +38,7 @@ export const CanceledPackages = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 

@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Table } from '@/widgets/table';
 import { columns } from '../config/columns';
-import { EditIcon, ViewIcon } from '@/shared/ui/icons';
 import { ProductService } from '@/shared/api/services';
 import { TableDataT } from '@/shared/types';
 
 export const ProductsTab = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -25,7 +23,7 @@ export const ProductsTab = () => {
   });
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     ProductService.getProducts({ ...data.pagination, ...data.filters })
       .then((resp) => {
         setData((prev) => ({
@@ -35,7 +33,7 @@ export const ProductsTab = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 

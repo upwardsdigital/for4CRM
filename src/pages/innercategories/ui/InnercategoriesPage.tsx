@@ -13,6 +13,9 @@ import { Modal } from '@shared/ui/Modal';
 import { DataAction } from '@features/data-action/ui/DataAction';
 import { initialModalData } from '../model/initialModalData';
 import { toast } from 'react-toastify';
+import { useModal } from '@/shared/hooks';
+import { DeleteIcon } from '@/shared/ui/icons/DeleteIcon';
+import { DeleteModal } from '@/features/delete-modal';
 
 export const InnercategoriesPage = () => {
   const [data, setData] = useState<TableDataT>({
@@ -33,6 +36,7 @@ export const InnercategoriesPage = () => {
   });
 
   const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
+  const { openModal, closeModal } = useModal();
 
   const fetchData = async () => {
     try {
@@ -106,6 +110,7 @@ export const InnercategoriesPage = () => {
           const response = await DepartmentService.createDepartment({
             ...modalData.values,
             parent: modalData.values.department,
+            type: 4,
           });
           // if (modalData.values.department) {
           //   const
@@ -188,6 +193,37 @@ export const InnercategoriesPage = () => {
                     />
                     <button onClick={() => handleEdit(row)}>
                       <EditIcon />
+                    </button>
+                    <button
+                      onClick={() =>
+                        openModal(
+                          'delete-subcategory-modal',
+                          <DeleteModal
+                            title="Удалить внутреннюю категорию"
+                            onCancel={() => closeModal('delete-subcategory-modal')}
+                            onSubmit={() => {
+                              DepartmentService.deleteDepartment(row.id)
+                                .then(() => {
+                                  toast('Успешно удалено', { type: 'success' });
+                                  setData((prev) => {
+                                    const prevRows = [...prev.rows];
+                                    const rowIndex = prevRows.findIndex(
+                                      (rowItem) => rowItem.id === row.id
+                                    );
+                                    prevRows.splice(rowIndex, 1);
+                                    return { ...prev, rows: prevRows };
+                                  });
+                                  closeModal('delete-subcategory-modal');
+                                })
+                                .catch(() => {
+                                  toast('Возникла ошибка при удалении', { type: 'error' });
+                                });
+                            }}
+                          />
+                        )
+                      }
+                    >
+                      <DeleteIcon />
                     </button>
                   </div>
                 );

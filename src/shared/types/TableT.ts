@@ -22,6 +22,7 @@ export interface ModalDataT {
   fields: Record<string, ModalDataFieldT>;
   validation: ModalDataValidationT;
   values: Record<string, any>;
+  isEdited?: boolean;
 }
 
 export type ModalDataValidationT = {

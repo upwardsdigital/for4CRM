@@ -105,6 +105,7 @@ export const Table: React.FC<TableProps> = ({
                   className={styles.sort_btn}
                   onClick={() => {
                     const rowValue = table.rows.find((rowItem) => rowItem[column.field]);
+
                     setTable((prev) => ({
                       ...prev,
                       filters: {
@@ -166,6 +167,7 @@ export const Table: React.FC<TableProps> = ({
           '& .MuiDataGrid-columnHeaderTitleContainer': {
             flexDirection: 'row !important',
             fontWeight: '600 !important',
+            whiteSpace: 'normal',
           },
           '& .MuiDataGrid-cell': {
             textAlign: 'left !important',
@@ -214,7 +216,9 @@ export const Table: React.FC<TableProps> = ({
             </button>
 
             <button
-              disabled={paginationModel.page === totalPages - 1}
+              disabled={
+                paginationModel.page === totalPages || paginationModel.page === totalPages - 1
+              }
               onClick={() =>
                 handlePaginationChange({
                   ...paginationModel,
@@ -225,7 +229,9 @@ export const Table: React.FC<TableProps> = ({
               <ChevronRight />
             </button>
             <button
-              disabled={paginationModel.page === totalPages - 1}
+              disabled={
+                paginationModel.page === totalPages || paginationModel.page === totalPages - 1
+              }
               onClick={() =>
                 handlePaginationChange({
                   ...paginationModel,

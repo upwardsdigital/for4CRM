@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import styles from './Select.module.sass';
 import { useState, useEffect, useRef } from 'react';
-import { TextField } from '@/shared/ui/TextField';
 import { ChevronDown } from '@/shared/ui/icons';
 
 type SelectOptionItemT = {
@@ -17,6 +16,7 @@ interface TextFieldProps {
   name?: string;
   helperText?: string;
   isError?: boolean;
+  loading?: boolean;
   disabled?: boolean;
   className?: string;
   options?: SelectOptionItemT[];
@@ -25,18 +25,19 @@ interface TextFieldProps {
 
 export const Select: React.FC<TextFieldProps> = ({
   label,
-  placeholder,
   value,
-  required,
   name,
   helperText,
   isError,
+  placeholder,
+  loading,
   disabled,
   className,
   options,
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedValue, setSelectedValue] = useState<any>(null);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -52,8 +53,27 @@ export const Select: React.FC<TextFieldProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (options) {
+      const selectedOption = options.find((option) => option.value === value);
+      if (selectedOption) {
+        setSelectedValue(selectedOption);
+      }
+    } else {
+      setSelectedValue('');
+    }
+  }, [value, options]);
+
   return (
-    <div className={clsx(styles.select, className, isError && styles.error)} ref={selectRef}>
+    <div
+      className={clsx(
+        styles.select,
+        className,
+        isError && styles.error,
+        disabled && styles.disabled
+      )}
+      ref={selectRef}
+    >
       {label && <p className={styles.label_text}>{label}</p>}
       <div className={styles.select_title} onClick={() => setIsOpen(!isOpen)}>
         <div
@@ -63,8 +83,11 @@ export const Select: React.FC<TextFieldProps> = ({
           // required={required}
           // disabled={disabled}
         >
-          {(options && options.find((option) => option.value === value)?.label) ||
-            `Select ${name ? name : 'option'}`}
+          {selectedValue
+            ? selectedValue.label
+            : placeholder
+            ? placeholder
+            : `Select ${name ? name : 'option'}`}
         </div>
         <ChevronDown />
       </div>

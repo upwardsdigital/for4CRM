@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Table } from '@/widgets/table';
 import { columns } from '../config/columns';
-import { EditIcon, TagIcon, ViewIcon } from '@/shared/ui/icons';
+import { TagIcon, ViewIcon } from '@/shared/ui/icons';
 import { TableDataT } from '@/shared/types';
 import { BrandService } from '@/shared/api/services/BrandService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
 
 export const BrandsTab = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -35,7 +34,7 @@ export const BrandsTab = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setData((prev) => ({ ...prev, status: { ...prev.status, loading: true } }));
     BrandService.getBrands(data.pagination)
       .then((resp) => {
         setData((prev) => ({
@@ -45,7 +44,7 @@ export const BrandsTab = () => {
         }));
       })
       .finally(() => {
-        setIsLoading(false);
+        setData((prev) => ({ ...prev, status: { ...prev.status, loading: false } }));
       });
   }, [data.filters, data.pagination]);
 
