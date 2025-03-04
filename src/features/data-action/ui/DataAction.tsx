@@ -4,6 +4,7 @@ import { TextField } from '@/shared/ui/TextField';
 import styles from './DataAction.module.sass';
 import { Button } from '@/shared/ui/Button/ui/Button';
 import { Select } from '@/shared/ui/Select/ui/Select';
+import { Checkbox } from '@/shared/ui/Checkbox';
 
 interface DataActionProps {
   title?: string;
@@ -65,15 +66,32 @@ export const DataAction: React.FC<DataActionProps> = ({
               );
             }
 
+            if (field.type === 'checkbox') {
+              return (
+                <Checkbox
+                  label={field.label}
+                  checked={modalData.values[key] || false}
+                  onChange={(e) =>
+                    setModalData((prev) => ({
+                      ...prev,
+                      values: { ...prev.values, [key]: e.target.checked },
+                    }))
+                  }
+                />
+              );
+            }
+
             return (
               <TextField
                 label={field.label}
+                type={field.type}
                 placeholder={field.placeholder}
                 name={key}
                 value={modalData.values[key]}
                 isError={modalData.validation.error[key]}
                 helperText={modalData.validation.message[key]}
                 onChange={onChange}
+                required={field.required}
               />
             );
           })}

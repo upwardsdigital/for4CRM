@@ -28,7 +28,7 @@ export const CrmSidebar = () => {
             </p>
           }
         >
-          <Link to="/clients" className={clsx(styles.sidebar_item, styles.dropdown_item)}>
+          <Link to="/crm/clients" className={clsx(styles.sidebar_item, styles.dropdown_item)}>
             Клиенты
           </Link>
           <Link to="" className={clsx(styles.sidebar_item, styles.dropdown_item)}>

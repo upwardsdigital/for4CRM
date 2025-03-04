@@ -17,6 +17,7 @@ import { MarginPercentage } from '@/pages/margin-percentage';
 import { ImportDutiesPage } from '@/pages/import-duties';
 import { SuppliersPage } from '@/pages/suppliers';
 import { LoginPage } from '@/pages/login';
+import { ClientsPage } from '@/pages/clients';
 
 const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
@@ -78,7 +79,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/crm',
-    element: <Layout />,
+    element: <Layout isCrm />,
+    children: [
+      {
+        path: 'clients',
+        element: <ClientsPage />,
+      },
+    ],
   },
 ]);
 

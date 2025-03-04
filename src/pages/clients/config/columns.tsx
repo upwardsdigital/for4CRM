@@ -12,7 +12,7 @@ export const columns: GridColDef[] = [
     type: 'string',
     headerName: 'Клиент',
     sortable: true,
-    field: 'client',
+    field: 'first_name',
     flex: 1,
     renderCell: ({ row }) => `${row.first_name} ${row.last_name}`,
   },
@@ -48,12 +48,12 @@ export const columns: GridColDef[] = [
     headerName: 'Теги',
     field: 'clientTags',
     flex: 1,
-    // renderCell: ({ value }) =>
-    //   value.map((tag: string) => (
-    //     <div key={tag} className="tag active">
-    //       {tag}
-    //     </div>
-    //   )),
+    renderCell: ({ value }) =>
+      value?.map((tag: string) => (
+        <div key={tag} className="tag active">
+          {tag}
+        </div>
+      )),
   },
   {
     type: 'string',
