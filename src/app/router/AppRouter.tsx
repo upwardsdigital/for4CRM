@@ -1,19 +1,25 @@
 import { ModalProvider } from '@/shared/providers/ModalProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Layout } from '@/widgets/layout';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Layout } from '@/widgets/layout';
 
 import { CategoriesPage } from '@/pages/categories';
-import { ClientsPage } from '@/pages/clients';
 import { DepartmentsPage } from '@/pages/departments';
 import { HomePage } from '@/pages/home';
 import { InnercategoriesPage } from '@/pages/innercategories';
 import { BannersPage } from '@/pages/banners';
 import { AdditionalFilters } from '@/pages/additional-filters';
 import { CombinationsPage } from '@/pages/combinations';
+import { SubdepartmentsPage } from '@/pages/subdepartments';
+import { SubcategoriesPage } from '@/pages/subcategories';
+import { SizesPage } from '@/pages/sizes';
+import { MarginPercentage } from '@/pages/margin-percentage';
+import { ImportDutiesPage } from '@/pages/import-duties';
+import { SuppliersPage } from '@/pages/suppliers';
+import { LoginPage } from '@/pages/login';
 
 const router = createBrowserRouter([
-  { path: '/', element: <>hello world</> },
+  { path: '/', element: <LoginPage /> },
   {
     path: '/admin',
     element: <Layout />,
@@ -21,6 +27,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: '*',
+        element: <>Not Found Page</>,
       },
       {
         path: 'departments',
@@ -54,6 +64,16 @@ const router = createBrowserRouter([
         path: 'banners',
         element: <BannersPage />,
       },
+      {
+        path: 'sizes',
+        element: <SizesPage />,
+      },
+      {
+        path: 'margin-percentage',
+        element: <MarginPercentage />,
+      },
+      { path: 'import-duties', element: <ImportDutiesPage /> },
+      { path: 'suppliers', element: <SuppliersPage /> },
     ],
   },
   {

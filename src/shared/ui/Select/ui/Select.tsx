@@ -20,20 +20,20 @@ interface TextFieldProps {
   disabled?: boolean;
   className?: string;
   options?: SelectOptionItemT[];
+  readOnly?: boolean;
   onChange?: (option: SelectOptionItemT) => void;
 }
 
 export const Select: React.FC<TextFieldProps> = ({
   label,
   value,
-  name,
   helperText,
   isError,
   placeholder,
-  loading,
   disabled,
   className,
   options,
+  readOnly,
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -75,19 +75,16 @@ export const Select: React.FC<TextFieldProps> = ({
       ref={selectRef}
     >
       {label && <p className={styles.label_text}>{label}</p>}
-      <div className={styles.select_title} onClick={() => setIsOpen(!isOpen)}>
-        <div
-          className={styles.field}
-          // helperText={helperText}
-          // isError={isError}
-          // required={required}
-          // disabled={disabled}
-        >
-          {selectedValue
-            ? selectedValue.label
-            : placeholder
-            ? placeholder
-            : `Select ${name ? name : 'option'}`}
+      <div
+        className={styles.select_title}
+        onClick={() => {
+          if (!readOnly) {
+            setIsOpen(!isOpen);
+          }
+        }}
+      >
+        <div className={styles.field}>
+          {selectedValue ? selectedValue.label : placeholder ? placeholder : ``}
         </div>
         <ChevronDown />
       </div>

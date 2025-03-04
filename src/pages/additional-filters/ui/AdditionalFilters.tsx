@@ -5,7 +5,6 @@ import { ModalDataT, TableDataT } from '@shared/types';
 import { Table } from '@widgets/table';
 import { columns } from '../config/columns';
 import { EditIcon } from '@shared/ui/icons';
-import { DepartmentService } from '@shared/api/services/DepartmentService';
 import { ToggleButton } from '@/shared/ui/ToggleButton';
 import { Button } from '@shared/ui/Button/ui/Button';
 import { PlusIcon } from '@shared/ui/icons/PlusIcon';
@@ -68,7 +67,7 @@ export const AdditionalFilters = () => {
     fetchData();
   }, [data.filters, data.pagination]);
 
-  const updateDepartmentStatus = (id: number, status: boolean) => {
+  const updateFilterStatus = (id: number, status: boolean) => {
     setData((prev) => {
       const prevRowsCopy = [...prev.rows];
       const userIndex = data.rows.findIndex((item) => item.id === id);
@@ -148,7 +147,7 @@ export const AdditionalFilters = () => {
   };
 
   const handleSelectChange = (option: any, name: string) => {
-    setData((prev) => ({ ...prev, values: { ...prev.values, [name]: option.value } }));
+    setModalData((prev) => ({ ...prev, values: { ...prev.values, [name]: option.value } }));
   };
 
   return (
@@ -179,14 +178,14 @@ export const AdditionalFilters = () => {
                       value={row.is_active}
                       onChange={(e) => {
                         const value = e.target.checked;
-                        updateDepartmentStatus(row.id, value);
-                        DepartmentService.updateDepartmentById({
+                        updateFilterStatus(row.id, value);
+                        DetailService.updateDetails({
                           is_active: value,
                           id: row.id,
                         }).catch((err) => {
                           toast('Не удалось обновить статус');
                           console.log(err);
-                          updateDepartmentStatus(row.id, !value);
+                          updateFilterStatus(row.id, !value);
                         });
                       }}
                     />
@@ -201,7 +200,7 @@ export const AdditionalFilters = () => {
                             title="Удалить категорию"
                             onCancel={() => closeModal('delete-category-modal')}
                             onSubmit={() => {
-                              DepartmentService.deleteDepartment(row.id)
+                              DetailService.deleteDetails(row.id)
                                 .then(() => {
                                   toast('Успешно удалено', { type: 'success' });
                                   setData((prev) => {

@@ -1,12 +1,22 @@
-import { CheckListIcon, FilterIcon, ImageIcon, MenuIcon } from '@/shared/ui/icons';
-import { CombineCellsIcon } from '@/shared/ui/icons/CombineCellsIcon';
+import {
+  CheckListIcon,
+  FilterIcon,
+  ImageIcon,
+  MenuIcon,
+  CombineCellsIcon,
+  ExpandIcon,
+  ChartIcon,
+  UserVoiceIcon,
+  MobileIcon,
+} from '@/shared/ui/icons';
+import { NoteIcon } from '@/shared/ui/icons/NoteIcon';
 import { BiHome } from 'react-icons/bi';
 
 export const links = [
   {
     title: 'Главная',
     icon: <BiHome size={20} />,
-    pathname: '/home',
+    pathname: '/admin',
   },
   {
     title: 'Отделы',
@@ -14,11 +24,11 @@ export const links = [
     children: [
       {
         title: 'Отделы',
-        pathname: '/departments',
+        pathname: '/admin/departments',
       },
       {
         title: 'Подотделы',
-        pathname: '/sub-departments',
+        pathname: '/admin/sub-departments',
       },
     ],
   },
@@ -28,31 +38,56 @@ export const links = [
     children: [
       {
         title: 'Категории',
-        pathname: '/categories',
+        pathname: '/admin/categories',
       },
       {
         title: 'Подкатегории',
-        pathname: '/sub-categories',
+        pathname: '/admin/sub-categories',
       },
       {
         title: 'Внутренние категории',
-        pathname: '/inner-categories',
+        pathname: '/admin/inner-categories',
       },
     ],
   },
   {
     title: 'Дополнительные фильтры',
     icon: <FilterIcon />,
-    pathname: '/additional-filters',
+    pathname: '/admin/additional-filters',
   },
   {
     title: 'Комбинации',
     icon: <CombineCellsIcon />,
-    pathname: '/combinations',
+    pathname: '/admin/combinations',
   },
   {
     title: 'Баннеры',
     icon: <ImageIcon />,
-    pathname: '/banners',
+    pathname: '/admin/banners',
+  },
+  {
+    title: 'Размеры',
+    icon: <ExpandIcon />,
+    pathname: '/admin/sizes',
+  },
+  {
+    title: 'Поставщики',
+    icon: <UserVoiceIcon />,
+    pathname: '/admin/suppliers',
+  },
+  {
+    title: 'Импортная пошлина',
+    icon: <NoteIcon />,
+    pathname: '/admin/import-duties',
+  },
+  {
+    title: 'Процент маржи',
+    icon: <ChartIcon />,
+    pathname: '/admin/margin-percentage',
+  },
+  {
+    title: 'Система управления контентом',
+    icon: <MobileIcon />,
+    pathname: '/admin/crm',
   },
 ];

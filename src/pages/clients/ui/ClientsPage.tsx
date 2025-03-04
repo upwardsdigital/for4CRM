@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { columns } from '../config/columns';
 
 export const ClientsPage = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<TableDataT>({
     rows: [],
     count: 0,
@@ -38,7 +37,6 @@ export const ClientsPage = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     ClientService.getClients(data.pagination)
       .then((resp) => {
         setData((prev) => ({
@@ -47,9 +45,7 @@ export const ClientsPage = () => {
           count: resp.data.info.count,
         }));
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => {});
   }, [data.filters, data.pagination]);
 
   return (

@@ -15,3 +15,8 @@ export { MenuIcon } from './MenuIcon';
 export { CheckListIcon } from './CheckListIcon';
 export { ImageIcon } from './ImageIcon';
 export { FilterIcon } from './FilterIcon';
+export { ChartIcon } from './ChartIcon';
+export { CombineCellsIcon } from './CombineCellsIcon';
+export { ExpandIcon } from './ExpandIcon';
+export { UserVoiceIcon } from './UserVoiceIcon';
+export { MobileIcon } from './MobileIcon';

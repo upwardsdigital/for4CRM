@@ -1,13 +1,19 @@
 import clsx from 'clsx';
 import styles from './BannersPage.module.sass';
 import { Tabs } from '@/shared/ui/Tabs';
-import { useState } from 'react';
-import { tabs } from '../model/tabs';
+import { useEffect, useState } from 'react';
 import { TabContent } from './TabContent';
+import { DepartmentService } from '@/shared/api/services';
 
 export const BannersPage = () => {
-  const [activeTab, setActiveTab] = useState<string>('main');
-  
+  const [activeTab, setActiveTab] = useState<any>(3);
+  const [departments, setDepartments] = useState<any[]>([]);
+
+  useEffect(() => {
+    DepartmentService.getDepartments({ type: 0 }).then((resp) => {
+      setDepartments(resp.data.items.sort((a, b) => a.id - b.id));
+    });
+  }, []);
 
   return (
     <div className={clsx(styles.page, 'page')}>
@@ -19,13 +25,25 @@ export const BannersPage = () => {
         <Tabs
           value={activeTab}
           className={styles.tabs}
-          tabs={tabs}
+          tabs={[
+            { label: 'Главный', value: 0 },
+            ...departments.map((department) => ({
+              label: department.name,
+              value: department.id,
+            })),
+          ]}
           onChange={(tab) => setActiveTab(tab.value)}
         />
 
-        {tabs.map((tab) => {
+        {[
+          { label: 'Главный', value: 0 },
+          ...departments.map((department) => ({
+            label: department.name,
+            value: department.id,
+          })),
+        ].map((tab) => {
           if (activeTab === tab.value) {
-            return <TabContent />;
+            return <TabContent key={tab.value} departmentId={tab.value} />;
           }
         })}
       </div>

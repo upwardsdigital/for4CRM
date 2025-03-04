@@ -1,0 +1,72 @@
+import { GridColDef } from '@mui/x-data-grid';
+
+export const columns: GridColDef[] = [
+  {
+    type: 'string',
+    headerName: '№',
+    field: 'id',
+    width: 80,
+  },
+  {
+    type: 'string',
+    headerName: 'Подкатегория',
+    field: 'department',
+    sortable: true,
+    flex: 1,
+    valueGetter: (value: any) => value.name,
+  },
+  {
+    type: 'string',
+    headerName: 'USA',
+    field: 'us',
+    width: 70,
+    sortable: true,
+  },
+  {
+    type: 'string',
+    headerName: 'EU',
+    field: 'uk',
+    width: 70,
+    sortable: true,
+  },
+  {
+    type: 'string',
+    headerName: 'GB',
+    field: 'uk',
+    width: 70,
+    sortable: true,
+  },
+  {
+    type: 'string',
+    headerName: 'IT',
+    field: 'it',
+    width: 70,
+    sortable: true,
+  },
+  {
+    type: 'string',
+    headerName: 'Размер',
+    field: 'name',
+    sortable: true,
+    flex: 1,
+  },
+  {
+    type: 'string',
+    headerName: 'Статус',
+    field: 'is_active',
+    sortable: true,
+    flex: 1,
+    renderCell: ({ value }) =>
+      value ? (
+        <div className="status active">
+          <span></span>
+          <p>Активный</p>
+        </div>
+      ) : (
+        <div className="status inactive">
+          <span></span>
+          <p>Неактивный</p>
+        </div>
+      ),
+  },
+];

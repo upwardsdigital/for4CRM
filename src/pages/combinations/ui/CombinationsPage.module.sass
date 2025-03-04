@@ -1,0 +1,33 @@
+.dropdown
+  width: 100%
+  border: 1px solid #E0E4EA
+  border-radius: 10px
+  overflow: hidden
+
+  .title_wrap
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: 10px 0
+
+    .title
+      font-weight: 400
+      font-size: 14px
+  .dropdown_btn
+    font-weight: 600
+    display: inline-flex
+    align-items: center
+    gap: 10px
+    font-size: 14px
+
+  &_content
+    width: 100%
+    overflow: hidden
+    transition: max-height 0.3s ease-in-out
+    max-height: 0
+    opacity: 0
+    background: #282828
+
+.dropdown_table
+  margin-top: 0 !important

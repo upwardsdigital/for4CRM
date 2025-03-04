@@ -2,17 +2,15 @@ import clsx from 'clsx';
 import styles from './CombinationsPage.module.sass';
 import { useEffect, useState } from 'react';
 import { ModalDataT, TableDataT } from '@shared/types';
-import { Table } from '@widgets/table';
-import { columns } from '../config/columns';
-import { EditIcon } from '@shared/ui/icons';
 import { DepartmentService } from '@shared/api/services/DepartmentService';
-import { ToggleButton } from '@/shared/ui/ToggleButton';
 import { Button } from '@shared/ui/Button/ui/Button';
 import { PlusIcon } from '@shared/ui/icons/PlusIcon';
 import { Modal } from '@shared/ui/Modal';
 import { DataAction } from '@features/data-action/ui/DataAction';
 import { initialModalData } from '../model/initialModalData';
 import { toast } from 'react-toastify';
+import { TableDropdown } from './TableDropdown';
+import { CombinationService } from '@/shared/api/services';
 
 export const CombinationsPage = () => {
   const [data, setData] = useState<TableDataT>({
@@ -36,7 +34,7 @@ export const CombinationsPage = () => {
 
   const fetchData = async () => {
     try {
-      const resp = await DepartmentService.getDepartments({
+      const resp = await CombinationService.getCombinations({
         ...data.pagination,
         ...data.filters,
         type: 0,
@@ -60,15 +58,6 @@ export const CombinationsPage = () => {
   useEffect(() => {
     fetchData();
   }, [data.filters, data.pagination]);
-
-  const updateDepartmentStatus = (id: number, status: boolean) => {
-    setData((prev) => {
-      const prevRowsCopy = [...prev.rows];
-      const userIndex = data.rows.findIndex((item) => item.id === id);
-      prevRowsCopy[userIndex].is_active = status;
-      return { ...prev, rows: prevRowsCopy };
-    });
-  };
 
   const handleModalSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,15 +87,6 @@ export const CombinationsPage = () => {
     }
   };
 
-  const handleEdit = (data: any) => {
-    setModalData((prev) => ({
-      ...prev,
-      isOpen: true,
-      type: 'edit',
-      values: { ...data },
-    }));
-  };
-
   const handleModalOpen = () =>
     setModalData((prev) => ({ ...prev, ...initialModalData, isOpen: !prev.isOpen }));
 
@@ -121,42 +101,48 @@ export const CombinationsPage = () => {
       </div>
 
       <div className={clsx(styles.page_table, 'page_table')}>
-        {/* <Table
-          table={data}
-          setTable={setData}
-          columns={[
-            ...columns,
-            {
-              type: 'actions',
-              field: 'actions',
-              width: 120,
-              renderCell: ({ row }) => {
-                return (
-                  <div className="table-actions">
-                    <ToggleButton
-                      value={row.is_active}
-                      onChange={(e) => {
-                        const value = e.target.checked;
-                        updateDepartmentStatus(row.id, value);
-                        DepartmentService.updateDepartmentById({
-                          is_active: value,
-                          id: row.id,
-                        }).catch((err) => {
-                          toast('Не удалось обновить статус');
-                          console.log(err);
-                          updateDepartmentStatus(row.id, !value);
-                        });
-                      }}
-                    />
-                    <button onClick={() => handleEdit(row)}>
-                      <EditIcon />
-                    </button>
-                  </div>
-                );
+        {data.rows.map((rowItem) => (
+          <TableDropdown isOpen={false} title={rowItem.department.name}>
+            dsdsds
+            {/* <Table
+            table={data}
+            setTable={setData}
+            className={styles.dropdown_table}
+            columns={[
+              ...columns,
+              {
+                type: 'actions',
+                field: 'actions',
+                width: 120,
+                renderCell: ({ row }) => {
+                  return (
+                    <div className="table-actions">
+                      <ToggleButton
+                        value={row.is_active}
+                        onChange={(e) => {
+                          const value = e.target.checked;
+                          updateDepartmentStatus(row.id, value);
+                          DepartmentService.updateDepartmentById({
+                            is_active: value,
+                            id: row.id,
+                          }).catch((err) => {
+                            toast('Не удалось обновить статус');
+                            console.log(err);
+                            updateDepartmentStatus(row.id, !value);
+                          });
+                        }}
+                      />
+                      <button onClick={() => handleEdit(row)}>
+                        <EditIcon />
+                      </button>
+                    </div>
+                  );
+                },
               },
-            },
-          ]}
-        /> */}
+            ]}
+          /> */}
+          </TableDropdown>
+        ))}
       </div>
 
       <Modal isOpen={modalData.isOpen} onClose={handleModalOpen}>

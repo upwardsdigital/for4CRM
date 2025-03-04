@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { loadDepartments } from '../api/departmentService';
 import { Select } from '@/shared/ui/Select/ui/Select';
 import { useQuery } from '@tanstack/react-query';
@@ -14,12 +14,7 @@ const departmentKeys = [
 
 export const DepartmentSelector = ({ isOpen, initialValues, setValues }) => {
   // const [departmentsData, setDepartmentsData] = useState<any>({});
-  const {
-    isPending,
-    isError,
-    data: departmentsData,
-    error,
-  } = useQuery({
+  const { isPending, data: departmentsData } = useQuery({
     queryKey: ['departments-dictionary'],
     queryFn: async () => {
       const data = await loadDepartments();
@@ -72,7 +67,7 @@ export const DepartmentSelector = ({ isOpen, initialValues, setValues }) => {
           };
 
           console.log(newValues);
-          const departmentNumbers = departmentKeys.map((item, index) => index);
+          const departmentNumbers = departmentKeys.map((__, index) => index);
           for (
             let index = departmentKeys.findIndex((key) => key === currentKey);
             index < departmentNumbers.length;

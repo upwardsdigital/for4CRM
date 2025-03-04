@@ -1,3 +1,3 @@
 export const mainBannerModel = {
-  fields: {},
+  layout: ['image', 'title', 'title'],
 };

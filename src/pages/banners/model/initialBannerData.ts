@@ -1,0 +1,20 @@
+export const initialBannerData = {
+  isRequested: false,
+  isEdit: false,
+  values: {
+    url: null,
+    title: '',
+    title_ru: '',
+    main_title: '',
+    main_title_ru: '',
+    opacity: 1,
+    is_active: true,
+    type: 2,
+    isHorizontal: false,
+    isFullWidth: false,
+    file: null,
+    department: null,
+    department2: null,
+    brand: null,
+  },
+};

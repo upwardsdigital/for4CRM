@@ -1,0 +1,228 @@
+import clsx from 'clsx';
+import styles from './SuppliersPage.module.sass';
+import { useEffect, useState } from 'react';
+import { ModalDataT, TableDataT } from '@shared/types';
+import { Table } from '@widgets/table';
+import { columns } from '../config/columns';
+import { EditIcon, ViewIcon } from '@shared/ui/icons';
+import { ToggleButton } from '@/shared/ui/ToggleButton';
+import { Button } from '@shared/ui/Button/ui/Button';
+import { PlusIcon } from '@shared/ui/icons/PlusIcon';
+import { Modal } from '@shared/ui/Modal';
+import { DataAction } from '@features/data-action/ui/DataAction';
+import { initialModalData } from '../model/initialModalData';
+import { toast } from 'react-toastify';
+import { DeleteIcon } from '@/shared/ui/icons/DeleteIcon';
+import { DeleteModal } from '@/features/delete-modal';
+import { useModal } from '@/shared/hooks';
+import { SupplierService } from '@/shared/api/services';
+
+export const SuppliersPage = () => {
+  const [data, setData] = useState<TableDataT>({
+    rows: [],
+    count: 0,
+    status: {
+      loading: false,
+      error: false,
+      message: '',
+    },
+    filters: {
+      search: '',
+    },
+    pagination: {
+      skip: 0,
+      take: 10,
+    },
+  });
+
+  const [modalData, setModalData] = useState<ModalDataT>(initialModalData);
+  const { openModal, closeModal } = useModal();
+
+  const fetchData = async () => {
+    try {
+      const resp = await SupplierService.getSuppliers({
+        ...data.pagination,
+        ...data.filters,
+        type: 0,
+      });
+      if (resp.data) {
+        setData((prev) => ({
+          ...prev,
+          rows: resp.data.items,
+          count: resp.data.info.count,
+        }));
+      }
+    } catch (error) {
+    } finally {
+      setData((prev) => ({
+        ...prev,
+        status: { ...prev.status, loading: false },
+      }));
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [data.filters, data.pagination]);
+
+  const updateDepartmentStatus = (id: number, status: boolean) => {
+    setData((prev) => {
+      const prevRowsCopy = [...prev.rows];
+      const userIndex = data.rows.findIndex((item) => item.id === id);
+      prevRowsCopy[userIndex].is_active = status;
+      return { ...prev, rows: prevRowsCopy };
+    });
+  };
+
+  const handleModalSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = { ...modalData.values, service: +modalData.values.service };
+    switch (modalData.type) {
+      case 'add':
+        try {
+          const response = await SupplierService.createSupplier(data);
+          if (response) {
+            toast('Успешно добавлено', { type: 'success' });
+            handleModalOpen();
+            fetchData();
+          }
+        } catch (error) {}
+        break;
+      case 'edit':
+        try {
+          const response = await SupplierService.updateSupplier(data);
+          if (response) {
+            toast('Успешно изменено', { type: 'success' });
+            handleModalOpen();
+            fetchData();
+          }
+        } catch (error) {}
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleEdit = (data: any) => {
+    setModalData((prev) => ({
+      ...prev,
+      isOpen: true,
+      type: 'edit',
+      values: { ...data },
+    }));
+  };
+
+  const handleModalOpen = () =>
+    setModalData((prev) => ({ ...prev, ...initialModalData, isOpen: !prev.isOpen }));
+
+  return (
+    <div className={clsx(styles.page, 'page')}>
+      <div className="page-header">
+        <h1 className="page_title">Поставщики</h1>
+        <Button onClick={handleModalOpen}>
+          <PlusIcon />
+          Добавить
+        </Button>
+      </div>
+
+      <div className={clsx(styles.page_table, 'page_table')}>
+        <Table
+          table={data}
+          setTable={setData}
+          columns={[
+            ...columns,
+            {
+              type: 'actions',
+              field: 'actions',
+              width: 160,
+              renderCell: ({ row }) => {
+                return (
+                  <div className="table-actions">
+                    <ToggleButton
+                      value={row.is_active}
+                      onChange={(e) => {
+                        const value = e.target.checked;
+                        updateDepartmentStatus(row.id, value);
+                        SupplierService.updateSupplier({
+                          is_active: value,
+                          id: row.id,
+                        }).catch((err) => {
+                          toast('Не удалось обновить статус');
+                          console.log(err);
+                          updateDepartmentStatus(row.id, !value);
+                        });
+                      }}
+                    />
+                    <button onClick={() => handleEdit(row)}>
+                      <EditIcon />
+                    </button>
+                    <button
+                      onClick={() =>
+                        openModal(
+                          'delete-department-modal',
+                          <DeleteModal
+                            title="Удалить поставщика"
+                            onCancel={() => closeModal('delete-department-modal')}
+                            onSubmit={() => {
+                              SupplierService.deleteSupplier(row.id)
+                                .then(() => {
+                                  toast('Успешно удалено', { type: 'success' });
+                                  setData((prev) => {
+                                    const prevRows = [...prev.rows];
+                                    const rowIndex = prevRows.findIndex(
+                                      (rowItem) => rowItem.id === row.id
+                                    );
+                                    prevRows.splice(rowIndex, 1);
+                                    return { ...prev, rows: prevRows };
+                                  });
+                                  closeModal('delete-department-modal');
+                                })
+                                .catch(() => {
+                                  toast('Возникла ошибка при удалении', { type: 'error' });
+                                });
+                            }}
+                          />
+                        )
+                      }
+                    >
+                      <DeleteIcon />
+                    </button>
+                    <button
+                      onClick={() =>
+                        openModal(
+                          'supplier-detail',
+                          <div className={styles.supplier_data}>
+                            <div className={styles.supplier_data_item}>
+                              <h4>Наименование организации:</h4>
+                              <p>{row.name}</p>
+                            </div>
+                            <div className={styles.supplier_data_item}>
+                              <h4>Пунк забора/отправки:</h4>
+                              <p>{row.address}</p>
+                            </div>
+                          </div>,
+                          { title: 'Данные поставщика' }
+                        )
+                      }
+                    >
+                      <ViewIcon />
+                    </button>
+                  </div>
+                );
+              },
+            },
+          ]}
+        />
+      </div>
+
+      <Modal isOpen={modalData.isOpen} onClose={handleModalOpen}>
+        <DataAction
+          title="поставщика"
+          modalData={modalData}
+          setModalData={setModalData}
+          onSubmit={handleModalSubmit}
+        />
+      </Modal>
+    </div>
+  );
+};

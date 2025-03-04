@@ -14,7 +14,9 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ title, desc, onSubmit,
       <h2>{title}</h2>
       <p>{desc || 'Это действие необратимо.'}</p>
       <div className={styles.controls}>
-        <Button onClick={onCancel}>Отменить</Button>
+        <Button variant="outlined" onClick={onCancel}>
+          Отменить
+        </Button>
         <Button onClick={onSubmit}>Удалить</Button>
       </div>
     </div>

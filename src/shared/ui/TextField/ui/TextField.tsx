@@ -20,6 +20,7 @@ interface TextFieldProps {
   helperText?: string;
   disabled?: boolean;
   hideArrows?: boolean;
+  readOnly?: boolean;
   onDeleteFile?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClick?: () => void;
@@ -39,6 +40,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   isError,
   helperText,
   hideArrows,
+  readOnly,
   onDeleteFile,
   onChange,
   onClick,
@@ -76,7 +78,14 @@ export const TextField: React.FC<TextFieldProps> = ({
   );
 
   const renderInputField = () => (
-    <label className={clsx(styles.label, className, isError && styles.error)}>
+    <label
+      className={clsx(
+        styles.label,
+        className,
+        isError && styles.error,
+        readOnly && styles.readOnly
+      )}
+    >
       {label && <p className={styles.label_text}>{label}</p>}
       <div className={styles.field_wrap}>
         {type === 'search' && <SearchIcon />}
@@ -88,6 +97,7 @@ export const TextField: React.FC<TextFieldProps> = ({
           className={clsx(styles.field, inputClassName)}
           value={value}
           required={required}
+          readOnly={readOnly}
           onChange={onChange}
           onClick={onClick}
         />
