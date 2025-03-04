@@ -70,7 +70,7 @@ export const DataAction: React.FC<DataActionProps> = ({
               return (
                 <Checkbox
                   label={field.label}
-                  checked={modalData.values[key] || false}
+                  value={modalData.values[key] || false}
                   onChange={(e) =>
                     setModalData((prev) => ({
                       ...prev,
