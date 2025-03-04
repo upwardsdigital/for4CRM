@@ -1,5 +1,3 @@
-import { CheckListIcon, FilterIcon, ImageIcon, MenuIcon } from '@/shared/ui/icons';
-import { CombineCellsIcon } from '@/shared/ui/icons/CombineCellsIcon';
 import { BiHome } from 'react-icons/bi';
 
 export const links = [
