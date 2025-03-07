@@ -5,11 +5,13 @@ import styles from './DataAction.module.sass';
 import { Button } from '@/shared/ui/Button/ui/Button';
 import { Select } from '@/shared/ui/Select/ui/Select';
 import { Checkbox } from '@/shared/ui/Checkbox';
+import clsx from 'clsx';
 
 interface DataActionProps {
   title?: string;
   modalData: ModalDataT;
   children?: React.ReactNode;
+  className?: string;
   setModalData: React.Dispatch<SetStateAction<ModalDataT>>;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -18,6 +20,7 @@ export const DataAction: React.FC<DataActionProps> = ({
   title,
   modalData,
   children,
+  className,
   setModalData,
   onSubmit,
 }) => {
@@ -42,7 +45,7 @@ export const DataAction: React.FC<DataActionProps> = ({
   return (
     <form className={styles.action} onSubmit={onSubmit}>
       <h2>{`${modalData.type === 'add' ? 'Добавление' : 'Редактирование'} ${title}`}</h2>
-      <div className={styles.action_form}>
+      <div className={clsx(styles.action_form, className)}>
         {children}
         {children === undefined &&
           Object.entries(modalData.fields).map(([key, field]) => {
