@@ -1,5 +1,4 @@
 import React from 'react';
-import { CrmSidebar } from '@/widgets/crm-sidebar';
 import { Navbar } from '@/widgets/navbar';
 import { Sidebar } from '@/widgets/sidebar';
 import { Outlet } from 'react-router-dom';
@@ -27,7 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({ isCrm }) => {
         transition={Bounce}
       />
       <div className={styles.layout}>
-        {isCrm ? <CrmSidebar /> : <Sidebar />}
+        <Sidebar isCrm={isCrm} />
         <div className={styles.content}>
           <Navbar />
           <main className={styles.main}>

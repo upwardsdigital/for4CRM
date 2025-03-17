@@ -17,7 +17,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ title, instantOpen, children
     setIsOpen((prev) => !prev);
   };
 
-  useEffect(() => {
+  const handleOpen = () => {
     if (contentRef.current) {
       const content = contentRef.current;
       if (isOpen) {
@@ -30,10 +30,17 @@ export const Dropdown: React.FC<DropdownProps> = ({ title, instantOpen, children
         content.style.opacity = '0';
       }
     }
+  };
+
+  useEffect(() => {
+    handleOpen();
   }, [isOpen]);
 
   useEffect(() => {
-    setIsOpen(instantOpen);
+    setIsOpen(true);
+    setTimeout(() => {
+      handleOpen();
+    }, 100);
   }, [instantOpen]);
 
   return (

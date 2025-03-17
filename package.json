@@ -16,6 +16,7 @@
         "@mui/x-data-grid": "^7.25.0",
         "@mui/x-date-pickers-pro": "^7.27.1",
         "@tanstack/react-query": "^5.66.9",
+        "@wojtekmaj/react-daterange-picker": "^6.0.0",
         "axios": "^1.7.9",
         "clsx": "^2.1.1",
         "compose-function": "^3.0.3",
@@ -25,11 +26,15 @@
         "notistack": "^3.0.2",
         "react": "^18.3.1",
         "react-async-hook": "^4.0.0",
+        "react-date-range": "^2.0.1",
+        "react-datepicker": "^8.1.0",
         "react-dom": "^18.3.1",
         "react-icons": "^5.4.0",
         "react-router-dom": "^7.1.5",
         "react-toastify": "^11.0.3",
         "sass": "^1.83.4",
+        "slate": "^0.112.0",
+        "slate-react": "^0.112.1",
         "socket.io-client": "^4.8.1"
     },
     "devDependencies": {

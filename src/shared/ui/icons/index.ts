@@ -20,3 +20,8 @@ export { CombineCellsIcon } from './CombineCellsIcon';
 export { ExpandIcon } from './ExpandIcon';
 export { UserVoiceIcon } from './UserVoiceIcon';
 export { MobileIcon } from './MobileIcon';
+export {FilterUp} from "./FilterUp"
+export {OrdersIcon} from "./OrdersIcon"
+export {ClientsIcon} from "./ClientsIcon"
+export {RemainderIcon} from "./RemainderIcon"
+export {FinanceIcon} from "./FinanceIcon"

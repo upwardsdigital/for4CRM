@@ -24,7 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { Select } from '@/shared/ui/Select/ui/Select';
 import { TextField } from '@/shared/ui/TextField';
-import { FilterUp } from '@/shared/ui/icons/FilterUp';
+import { FilterUp } from '@/shared/ui/icons';
 
 export const ClientsPage = () => {
   const [data, setData] = useState<TableDataT>({

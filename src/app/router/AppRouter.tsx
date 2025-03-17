@@ -18,6 +18,16 @@ import { ImportDutiesPage } from '@/pages/import-duties';
 import { SuppliersPage } from '@/pages/suppliers';
 import { LoginPage } from '@/pages/login';
 import { ClientsPage } from '@/pages/clients';
+import { LoyaltyPage } from '@/pages/loyalty';
+import { LetterPage } from '@/pages/letter';
+import { OrdersShipment } from '@/pages/orders-shipment';
+import { OrdersGoods } from '@/pages/orders-goods';
+import { OrdersDelivery } from '@/pages/orders-delivery';
+import { OrdersMovement } from '@/pages/orders-movement';
+import { RemainderPage } from '@/pages/remainder';
+import { FinancePage } from '@/pages/finance';
+import { OrderCancel } from '@/pages/order-cancel';
+import { OrderReturn } from '@/pages/order-return';
 
 const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
@@ -84,6 +94,46 @@ const router = createBrowserRouter([
       {
         path: 'clients',
         element: <ClientsPage />,
+      },
+      {
+        path: 'loyalty',
+        element: <LoyaltyPage />,
+      },
+      {
+        path: 'letter',
+        element: <LetterPage />,
+      },
+      {
+        path: 'orders-shipment',
+        element: <OrdersShipment />,
+      },
+      {
+        path: 'orders-goods',
+        element: <OrdersGoods />,
+      },
+      {
+        path: 'orders-delivery',
+        element: <OrdersDelivery />,
+      },
+      {
+        path: 'orders-movement',
+        element: <OrdersMovement />,
+      },
+      {
+        path: 'remainder',
+        element: <RemainderPage />,
+      },
+      {
+        path: 'finance',
+        element: <FinancePage />,
+      },
+      {
+        path: 'order-cancel',
+        element: <OrderCancel />,
+      },
+      {
+        path: 'order-return',
+        element: <OrderReturn />,
       },
     ],
   },

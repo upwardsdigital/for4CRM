@@ -1,10 +1,15 @@
 import { Dropdown } from '@/shared/ui/Dropdown';
 import { Link, useLocation } from 'react-router-dom';
-import { links } from '../model/links';
+import { adminLinks } from '../model/adminLinks';
 import styles from './Sidebar.module.sass';
 import clsx from 'clsx';
+import { crmLinks } from '../model/crmLinks';
 
-export const Sidebar = () => {
+interface SidebarProps {
+  isCrm?: boolean;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isCrm }) => {
   const { pathname } = useLocation();
 
   const getActiveClass = (sidebarItem: any) => {
@@ -69,7 +74,9 @@ export const Sidebar = () => {
         <img src="/img/logo.svg" alt="For You Logo" className={styles.logo} />
       </div>
 
-      <div className={styles.content}>{links.map(renderSidebarItem)}</div>
+      <div className={styles.content}>
+        {isCrm ? crmLinks.map(renderSidebarItem) : adminLinks.map(renderSidebarItem)}
+      </div>
     </div>
   );
 };

@@ -12,7 +12,7 @@ import {
 import { NoteIcon } from '@/shared/ui/icons/NoteIcon';
 import { BiHome } from 'react-icons/bi';
 
-export const links = [
+export const adminLinks = [
   {
     title: 'Главная',
     icon: <BiHome size={20} />,
