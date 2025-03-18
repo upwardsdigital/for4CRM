@@ -8,34 +8,34 @@ export const columns: GridColDef[] = [
   },
   {
     type: 'string',
-    headerName: 'Дата офоромления доставки (передача курьеру)',
+    headerName: '6. Дата офоромления доставки (передача курьеру)',
     field: 'a',
     width: 180,
   },
   {
     type: 'string',
-    headerName: 'Курьер',
+    headerName: '7. Курьер',
     field: 'aasdasd',
   },
   {
     type: 'string',
-    headerName: 'Статус доставки',
+    headerName: '8. Статус доставки',
     field: 'ab',
   },
   {
     type: 'string',
-    headerName: 'Транзитный склад',
+    headerName: '9. Транзитный склад',
     field: 'ac',
   },
   {
     type: 'string',
-    headerName: 'Дата прибытия на транзитный склад',
+    headerName: '11. Дата прибытия на транзитный склад',
     field: 'ad',
     width: 170,
   },
   {
     type: 'string',
-    headerName: 'Статус',
+    headerName: '12. Статус',
     field: 'af',
   },
   {

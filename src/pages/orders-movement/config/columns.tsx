@@ -9,35 +9,35 @@ export const columns: GridColDef[] = [
   },
   {
     type: 'string',
-    headerName: 'Дата оформления доставки покупателю',
+    headerName: '18. Дата оформления доставки покупателю',
     field: 'a',
     width: 180,
   },
   {
     type: 'string',
-    headerName: 'Курьер',
+    headerName: '19. Курьер',
     field: 'aasdasd',
   },
   {
     type: 'string',
-    headerName: 'Статус ',
+    headerName: '20. Статус ',
     field: 'ab',
   },
   {
     type: 'string',
-    headerName: 'Покупатель',
+    headerName: '20. Покупатель',
     field: 'ac',
   },
   {
     type: 'string',
-    headerName: 'Дата доставки',
+    headerName: '21. Дата доставки',
     field: 'created_at',
     flex: 1,
     valueFormatter: (value) => format(value, 'dd/MM/yyyy'),
   },
   {
     type: 'string',
-    headerName: 'Статус',
+    headerName: '22. Статус',
     field: 'af',
   },
   {
