@@ -1,3 +1,4 @@
+import { SoftUnboxPage } from '@/pages/soft-unbox-page';
 import {
   CheckListIcon,
   FilterIcon,
@@ -8,6 +9,7 @@ import {
   ChartIcon,
   UserVoiceIcon,
   MobileIcon,
+  SoftIcon,
 } from '@/shared/ui/icons';
 import { NoteIcon } from '@/shared/ui/icons/NoteIcon';
 import { BiHome } from 'react-icons/bi';
@@ -89,5 +91,29 @@ export const adminLinks = [
     title: 'Система управления контентом',
     icon: <MobileIcon />,
     pathname: '/admin/crm',
+  },
+  {
+    title: 'SOFT',
+    icon: <SoftIcon />,
+    pathname: '/admin/soft-page',
+    children: [
+      {
+        title: 'Распаковка',
+        pathname: '/admin/soft-unbox-page',
+      },
+      {
+        title: 'Загрузка фотографии',
+        pathname: '/admin/soft-image-upload',
+        icon: <SoftUnboxPage />,
+      },
+      {
+        title: 'Растановка фотографий карточки товаров',
+        pathname: '/admin/soft-card-order',
+      },
+      {
+        title: 'Перевод',
+        pathname: '/admin/soft-translate',
+      },
+    ],
   },
 ];

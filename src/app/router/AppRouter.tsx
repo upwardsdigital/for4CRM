@@ -28,6 +28,11 @@ import { RemainderPage } from '@/pages/remainder';
 import { FinancePage } from '@/pages/finance';
 import { OrderCancel } from '@/pages/order-cancel';
 import { OrderReturn } from '@/pages/order-return';
+import { SoftPage } from '@/pages/soft-page';
+import { SoftUnboxPage } from '@/pages/soft-unbox-page';
+import { SoftImageUpload } from '@/pages/soft-image-upload';
+import { SoftCardOrder } from '@/pages/soft-card-order';
+import { SoftTranslate } from '@/pages/soft-translate';
 
 const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
@@ -85,6 +90,11 @@ const router = createBrowserRouter([
       },
       { path: 'import-duties', element: <ImportDutiesPage /> },
       { path: 'suppliers', element: <SuppliersPage /> },
+      { path: 'soft-page', element: <SoftPage /> },
+      { path: 'soft-unbox-page', element: <SoftUnboxPage /> },
+      { path: 'soft-image-upload', element: <SoftImageUpload /> },
+      { path: 'soft-card-order', element: <SoftCardOrder /> },
+      { path: 'soft-translate', element: <SoftTranslate /> },
     ],
   },
   {
